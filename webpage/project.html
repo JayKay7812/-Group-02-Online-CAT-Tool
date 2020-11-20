@@ -19,13 +19,13 @@
           <nav class="navbar navbar-default" role="navigation">
   					<ul class="nav nav-pills">
   						<li class="nav-item">
-  							<a class="nav-link active" href="#">主页</a>
+  							<a class="nav-link active" href="../index.html">主页</a>
   						</li>
   						<li class="nav-item">
-  							<a class="nav-link" href="#">项目</a>
+  							<a class="nav-link disabled" href="#">项目</a>
   						</li>
   						<li class="nav-item">
-  							<a class="nav-link disabled" href="#">术语库</a>
+  							<a class="nav-link" href="termbase.html">术语库</a>
   						</li>
   						<li class="nav-item">
   							<a class="nav-link" href="#">翻译记忆库</a>
@@ -33,9 +33,9 @@
   						<li class="nav-item dropdown ml-md-auto">
   							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">登录</a>
   							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-  								 <a class="dropdown-item" href="webpage/pmlogin">项目经理</a> <a class="dropdown-item" href="webpage/translatorlogin">普通译员</a>
+  								 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
   								<div class="dropdown-divider">
-  								</div> <a class="dropdown-item" href="#">注册</a>
+  								</div> <a class="dropdown-item" href="register.html">注册</a>
   							</div>
   						</li>
   					</ul>
@@ -52,37 +52,47 @@
 							<a class="nav-link disabled" href="#">项目</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">翻译记忆库</a>
+							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">术语库</a>
+							<a class="nav-link" href="termbase.html">术语库</a>
 						</li>
             <li class="nav-item">
-							<a class="nav-link" href="#">回收站</a>
+							<a class="nav-link" href="recycle.html">回收站</a>
 						</li>
 					</ul>
 				</div>
 				<div class="col-md-10 border">
-          <div class="border-bottom">
-            <div class="btn-group btn-group-lg boreder" role="group">
-  						<button class="btn btn-secondary" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-  							新建项目
-  						</button>
-  						<button class="btn btn-secondary" type="button">
-  							删除项目
-  						</button>
-  						<button class="btn btn-secondary" type="button">
-  							编辑项目
-  						</button>
-  						<button class="btn btn-secondary" type="button">
-                项目分析
-  						</button>
-              <button class="btn btn-secondary" type="button">
-                结项
-  						</button>
-  					</div>
-          </div>
+          <nav class="navbar border">
+            <ul class="nav nav-pills">
+              <li>
+                <div class="btn-group btn-group-lg boreder" role="group">
+      						<button class="btn btn-secondary" type="button">
+                    新建项目
+      						</button>
+      						<button class="btn btn-secondary" type="button">
+      							删除项目
+      						</button>
+      						<button class="btn btn-secondary" type="button">
+      							编辑项目
+      						</button>
+      						<button class="btn btn-secondary" type="button">
+                    项目分析
+      						</button>
+                  <button class="btn btn-secondary" type="button">
+                    结项
+      						</button>
+                </div>
+              </li>
+              <li class="nav-item dropdown ml-md-auto">
+  							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">排序方式</a>
+  							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+  								 <a class="dropdown-item">截止日期</a>
+                   <a class="dropdown-item">创建日期</a>
+  							</div>
+  						 </li>
+          </ul>
+        </nav>
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -173,33 +183,33 @@
 							</tr>
 						</tbody>
 					</table>
+          <nav class="pagination-sm">
+    				<ul class="pagination">
+    					<li class="page-item">
+    						<a class="page-link" href="#">Previous</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">1</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">2</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">3</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">4</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">5</a>
+    					</li>
+    					<li class="page-item">
+    						<a class="page-link" href="#">Next</a>
+    					</li>
+    				</ul>
+    			</nav>
 				</div>
 			</div>
-			<nav class="pagination-sm">
-				<ul class="pagination">
-					<li class="page-item">
-						<a class="page-link" href="#">Previous</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">1</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">2</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">3</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">4</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">5</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">Next</a>
-					</li>
-				</ul>
-			</nav>
 		</div>
 	</div>
 </div>
