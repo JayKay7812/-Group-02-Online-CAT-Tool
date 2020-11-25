@@ -11,7 +11,27 @@
 
     <link href="../resource/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../resource/bootstrap/css/style.css" rel="stylesheet">
-
+	<script language=JavaScript>
+	<!--
+	
+	function InputCheck(LoginForm)
+	{
+	  if (LoginForm.username.value == "")
+	  {
+	    alert("请输入用户名!");
+	    LoginForm.username.focus();
+	    return (false);
+	  }
+	  if (LoginForm.password.value == "")
+	  {
+	    alert("请输入密码!");
+	    LoginForm.password.focus();
+	    return (false);
+	  }
+	}
+	
+	//-->
+	</script>
   </head>
   <body>
 
@@ -26,13 +46,13 @@
 							<a class="nav-link active" href="../index.html">主页</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">项目</a>
+							<a class="nav-link" href="project.html">项目</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link disabled" href="#">术语库</a>
+							<a class="nav-link disabled" href="termbase.html">术语库</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">翻译记忆库</a>
+							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
 						</li>
 						<li class="nav-item dropdown ml-md-auto">
 							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">登录</a>
@@ -46,25 +66,25 @@
 					</nav>
 				</div>
 			</div>
-			<form role="form" style="width:300px;margin:100px auto 300px">
+			<form role="form" style="width:300px;margin:100px auto 300px" method="post" action="..\include\users\logreg\trsltr_register.php">
 							<div class="form-group">
 								<h3 class="border-bottom">注册</h3>
 								<label for="exampleInputEmail1">
 									用户名
 								</label>
-								<input type="email" class="form-control" id="exampleInputEmail1" />
+								<input type="text" class="form-control" id="trsltrname" name="trsltrname" />
 							</div>
 							<div class="form-group">
 
 								<label for="exampleInputPassword1">
 									密码
 								</label>
-								<input type="password" class="form-control" id="exampleInputPassword1" />
+								<input type="password" class="form-control" id="password" name="password" />
 							</div>
 							<input type="radio" name="job" value="项目经理">项目经理
 							<input type="radio" name="job" value="普通译员">普通译员
 							<br>
-							<button type="submit" class="btn btn-primary">
+							<button type="submit" name="submit" class="btn btn-primary">
 								注册
 							</button>
 						</form>
