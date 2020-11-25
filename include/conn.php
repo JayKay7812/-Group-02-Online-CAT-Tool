@@ -8,6 +8,6 @@ if(! $conn )
   die('Could not connect: ' . mysqli_error());
 }
 
-mysqli_select_db( $conn,'' );
+mysqli_select_db( $conn,'cat' );
 mysqli_query($conn,"set names utf8");
 ?>
