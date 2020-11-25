@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>翻译界面</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="../resource/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../resource/bootstrap/css/style.css" rel="stylesheet">
+
+	
+	<!-- The jQuery library is a prerequisite for all jqSuite products -->
+    <script type="text/javascript" src="../resource/jqgrid/js/jquery.min.js"></script>
+    <!-- We support more than 30 localizations -->
+    <script type="text/javascript" src="../resource/jqgrid/js/grid.locale-en.js"></script>
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/javascript" src="../resource/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" media="screen" href="../resource/jqgrid/css/ui.jqgrid-bootstrap.css" />
+	<script>
+		$.jgrid.defaults.width = 780;
+		$.jgrid.defaults.responsive = true;
+		$.jgrid.defaults.styleUI = 'Bootstrap';
+	</script>
+	
+	<style type="text/css">
+		button {background: transparent; border: none;}
+		button:hover {background-color:#f8f8f8}
+	</style>
+	
+  </head>
+  <body bgcolor="#f8f8f8">
+
+    <div class="container-fluid">
+	<div class="row" style="border-style:none;margin-bottom:0px;padding-bottom:0px;">
+		<div class="col-md-12" style="padding:0px;">
+			<nav class="navbar navbar-default" role="navigation">
+			<ul class="nav nav-pills">
+				<li class="nav-item">
+					<a class="nav-link active" href="../index.html">主页</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="project.html">项目</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="termbase.html">术语库</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
+				</li>
+				<div id="user_info" style="margin-left: auto !important;">
+				<li class="nav-item dropdown ml-md-auto">
+					 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">登录</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+						 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
+						<div class="dropdown-divider">
+						</div> <a class="dropdown-item" href="register.html">注册</a>
+					</div>
+				</li>
+				</div>
+			</ul>
+			</nav>
+		</div>
+	</div>
+	<div class="row"  style="border-style:none;margin-bottom:10px;padding:0px;">
+		<div class="col-md-12" style="border-style:none">
+			<div>
+			<div style="display: flex;">
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
+					<div><button><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
+				</div>
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/import.png" width="30" height="30">导入</button></div>
+					<div><button><img src="../resource/jqgrid/icon/export.png" width="30" height="30">导出</button></div>
+				</div>
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/web-search.png" width="50" height="50">在线查询</button></div>
+					
+				</div>
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/bold.png" width="30" height="30">加粗</button>
+					<button><img src="../resource/jqgrid/icon/italic.png" width="30" height="30">斜体</button>
+					<button><img src="../resource/jqgrid/icon/underline.png" width="30" height="30">下划线</button></div>
+					<div><button><img src="../resource/jqgrid/icon/superscript.png" width="30" height="30">上标</button>
+					<button><img src="../resource/jqgrid/icon/subscript.png" width="30" height="30">下标</button></div>
+				</div>
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/tag.png" width="30" height="30">复制标签</button></div>
+					<div><button><img src="../resource/jqgrid/icon/copy.png" width="30" height="30">复制原文</button></div>
+				</div>
+				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
+					<div><button><img src="../resource/jqgrid/icon/join.png" width="30" height="30">合并</button></div>
+					<div><button><img src="../resource/jqgrid/icon/split.png" width="30" height="30">分割</button></div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+	<div class="row"  style="border-style:none;padding:0px;">
+		
+		
+		<div class="col-md-8"> <!--句段窗口-->
+			<div >
+			    <table id="jqGrid" ></table>
+			    <div id="jqGridPager"></div>
+			</div>
+			    <script type="text/javascript" id="seg">
+			
+			        $(document).ready(function () {
+			            $("#jqGrid").jqGrid({
+			                url: 'data.json',
+			                editurl: 'clientArray',
+			                datatype: "json",
+			                colModel: [
+			                    {
+									label: "ID",
+			                        name: 'ID',
+			                        width: 75
+			                    },
+			                    {
+									label: "Source Language",
+			                        name: 'Source Language',
+			                        width: 500,
+			                         // must set editable to true if you want to make the field editable
+			                    },
+			                    {
+									label: "Target Language",
+			                        name: 'Target Language',
+			                        width: 500,
+			                        editable: true
+			                    },
+			                ],
+							sortname: 'EmployeeID',
+							loadonce : true,
+							viewrecords: true,
+			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
+			                width: 1000,
+			                height: 550,   
+			            });
+			            var lastSelection;
+			            function editRow(id) {
+			                if (id && id !== lastSelection) {
+			                    var grid = $("#jqGrid");
+			                    grid.jqGrid('restoreRow',lastSelection);
+			                    grid.jqGrid('editRow',id, {keys: true} );
+			                    lastSelection = id;
+			                }
+			            }
+			        });
+			    </script>
+		</div> 
+		
+		
+		<div class="col-md-4"> <!--翻译记忆库与术语库结果-->
+			<div >
+			    <table id="jqGrid0"></table>
+			    <div id="jqGridPager"></div>
+			</div>
+			<script type="text/javascript"> 
+				
+			
+			$(document).ready(function () {
+			
+					$("#jqGrid0").jqGrid({
+					url: 'data1.json',
+					datatype: "json",
+					 colModel: [
+						{ label: 'Source', name: 'Source', width: 200 },
+						{ label: '', name: '', width: 50 },
+						{ label: 'Target', name: 'Target', width: 200 },                
+					],
+					viewrecords: true, // show the current page, data rang and total records on the toolbar
+					width: 550,
+					height: 550,
+					rowNum: 30,
+					loadonce: true, // this is just for the demo
+					//pager: "#jqGridPager"
+				});
+			});
+			
+			 </script>
+		</div>
+	</div>
+</div>
+
+<script>
+document.getElementById("user_info").innerHTML="你好"; //显示登录信息
+</script>
+
+    
+    <script src="resource/bootstrap/js/bootstrap.min.js"></script>
+    <script src="resource/bootstrap/js/scripts.js"></script>
+  </body>
+</html>
