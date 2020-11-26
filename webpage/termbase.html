@@ -9,6 +9,25 @@
     <meta name="author" content="LayoutIt!">
     <link href="../resource/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../resource/bootstrap/css/style.css" rel="stylesheet">
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+      <script type="text/javascript" src="../resource/jqgrid/js/jquery.min.js"></script>
+      <!-- We support more than 30 localizations -->
+      <script type="text/javascript" src="../resource/jqgrid/js/grid.locale-en.js"></script>
+      <!-- This is the Javascript file of jqGrid -->
+      <script type="text/javascript" src="../resource/jqgrid/js/jquery.jqGrid.min.js"></script>
+      <!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
+      <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="jqgrid/css/ui.jqgrid-bootstrap.css" />-->
+  	<script>
+  		$.jgrid.defaults.width = 780;
+  		$.jgrid.defaults.responsive = true;
+  		$.jgrid.defaults.styleUI = 'Bootstrap';
+  	</script>
+
+  	<style type="text/css">
+  		button {background: transparent; border: none;}
+  		button:hover {background-color:#f8f8f8}
+  	</style>
   </head>
   <body>
     <div class="container-fluid">
@@ -63,17 +82,17 @@
 					</ul>
 				</div>
 				<div class="col-md-10 border">
-          <nav class="navbar border">
+          <nav class="navbar">
             <ul class="nav nav-pills">
               <li>
               <div class="btn-group btn-group-lg boreder" role="group">
-    						<button class="btn btn-secondary" type="button">
+    						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTBModal">
     							新建术语表
     						</button>
-                <button class="btn btn-secondary" type="button">
+                <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#imprtTBModal">
     							导入术语表
     						</button>
-                <button class="btn btn-secondary" type="button">
+                <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#exprtTBModal">
     							导出术语表
     						</button>
     						<button class="btn btn-secondary" type="button">
@@ -93,96 +112,61 @@
             </li>
         </ul>
       </nav>
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>
-									#
-								</th>
-								<th>
-									Product
-								</th>
-								<th>
-									Payment Taken
-								</th>
-								<th>
-									Status
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									1
-								</td>
-								<td>
-									TB - Monthly
-								</td>
-								<td>
-									01/04/2012
-								</td>
-								<td>
-									Default
-								</td>
-							</tr>
-							<tr class="table-active">
-								<td>
-									1
-								</td>
-								<td>
-									TB - Monthly
-								</td>
-								<td>
-									01/04/2012
-								</td>
-								<td>
-									Approved
-								</td>
-							</tr>
-							<tr class="table-success">
-								<td>
-									2
-								</td>
-								<td>
-									TB - Monthly
-								</td>
-								<td>
-									02/04/2012
-								</td>
-								<td>
-									Declined
-								</td>
-							</tr>
-							<tr class="table-warning">
-								<td>
-									3
-								</td>
-								<td>
-									TB - Monthly
-								</td>
-								<td>
-									03/04/2012
-								</td>
-								<td>
-									Pending
-								</td>
-							</tr>
-							<tr class="table-danger">
-								<td>
-									4
-								</td>
-								<td>
-									TB - Monthly
-								</td>
-								<td>
-									04/04/2012
-								</td>
-								<td>
-									Call in to confirm
-								</td>
-							</tr>
-						</tbody>
-					</table>
+      <div class="col-md-10"> <!--句段窗口-->
+        <div >
+            <table id="jqGrid" ></table>
+            <div id="jqGridPager"></div>
+        </div>
+            <script type="text/javascript" id="seg">
+                $(document).ready(function () {
+                    $("#jqGrid").jqGrid({
+                        url: 'data.json',
+                        editurl: 'clientArray',
+                        datatype: "json",
+                        colModel: [
+                            {
+                    label: "ID",
+                                name: 'ID',
+                                width: 75
+                            },
+                            {
+                    label: "项目名",
+                                name: '术语库名',
+                                width: 100,
+                                 // must set editable to true if you want to make the field editable
+                            },
+                            {
+                    label: "语言对",
+                                name: '语言对',
+                                width: 100,
+                                 // must set editable to true if you want to make the field editable
+                            },
+                            {
+                    label: "当前状态",
+                                name: '当前状态',
+                                width: 100,
+                                 // must set editable to true if you want to make the field editable
+                            },
+                        ],
+                sortname: 'EmployeeID',
+                loadonce : true,
+                viewrecords: true,
+                        onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
+                        width: 1000,
+                        height: 550,
+                    });
+                    var lastSelection;
+                    function editRow(id) {
+                        if (id && id !== lastSelection) {
+                            var grid = $("#jqGrid");
+                            grid.jqGrid('restoreRow',lastSelection);
+                            grid.jqGrid('editRow',id, {keys: true} );
+                            lastSelection = id;
+                        }
+                    }
+                });
+            </script>
+      </div>
           <nav class="pagination-sm">
     				<ul class="pagination">
     					<li class="page-item">
@@ -213,7 +197,164 @@
 		</div>
 	</div>
 </div>
-    <script src="../resource/bootstrap/js/jquery.min.js"></script>
+<!--TB新建模态-->
+<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+  <div class="modal fade" id="newTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">
+                      新建术语表
+                  </h4>
+              </div>
+              <div class="modal-body">
+                  <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">术语表名</label>
+                          <div class="col-sm-9">
+                              <input type="text" class="form-control" name="tbName" value="" id="tbName"
+                                     placeholder="术语表名">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">源语言</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="sourceLanguage" id="sourceLanguage">
+                              <option value="zh-CN">zh-CN</option>
+                              <option value="en-US">en-US</option>
+                            </select>
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">目标语言</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="targetLanguage" id="targetLanguage">
+                              <option value="zh-CN">zh-CN</option>
+                              <option value="en-US">en-US</option>
+                            </select>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                      提交
+                  </button><span id="tip"> </span>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+</form>
+<!--TB导入模态-->
+<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+  <div class="modal fade" id="imprtTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">
+                      导入术语表
+                  </h4>
+              </div>
+              <div class="modal-body">
+                  <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">术语表名</label>
+                          <div class="col-sm-9">
+                              <input type="text" class="form-control" name="projName" value="" id="projName"
+                                     placeholder="术语表名">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">源语言</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="sourceLanguage" id="sourceLanguage">
+                              <option value="zh-CN">zh-CN</option>
+                              <option value="en-US">en-US</option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">目标语言</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="targetLanguage" id="targetLanguage">
+                              <option value="zh-CN">zh-CN</option>
+                              <option value="en-US">en-US</option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">文件格式</label>
+                          <div class="col-sm-9">
+                            <select class="form-control" name="targetLanguage" id="targetLanguage">
+                              <option value="tmx">tmx</option>
+                              <option value="xlxs">xlxs</option>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="remark" class="col-sm-3 control-label">选择文件</label>
+                          <div class="col-sm-9">
+                              <input  type="file" class="form-control"  name="slctFile" id="slctFile">
+
+                              </input>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                      提交
+                  </button><span id="tip"> </span>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+</form>
+<!--TB导出模态-->
+<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+  <div class="modal fade" id="exprtTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">
+                      导出术语表
+                  </h4>
+              </div>
+              <div class="modal-body">
+                  <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                          <label for="lastname" class="col-sm-3 control-label">导出路径</label>
+                          <div class="col-sm-9">
+                            <input type="file" name="" value="">
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                      提交
+                  </button><span id="tip"> </span>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+</form>
     <script src="../resource/bootstrap/js/bootstrap.min.js"></script>
     <script src="../resource/bootstrap/js/scripts.js"></script>
   </body>
