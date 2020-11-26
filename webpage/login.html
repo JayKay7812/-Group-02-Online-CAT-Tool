@@ -16,15 +16,15 @@
 	
 	function InputCheck(LoginForm)
 	{
-	  if (LoginForm.username.value == "")
+	  if (LoginForm.trsltrname.value == "")
 	  {
-	    alert("Please enter your username!");
-	    LoginForm.username.focus();
+	    alert("请输入用户名！");
+	    LoginForm.trsltrname.focus();
 	    return (false);
 	  }
 	  if (LoginForm.password.value == "")
 	  {
-	    alert("Please enter your password!");
+	    alert("请输入密码！");
 	    LoginForm.password.focus();
 	    return (false);
 	  }
@@ -66,13 +66,13 @@
 					</nav>
 				</div>
 			</div>
-			<form role="form" style="width:300px;margin:100px auto 300px" method="post" action="..\include\users\log&reg\trsltr_login.php" onSubmit="return InputCheck(this)">
+			<form name="LoginForm" role="form" style="width:300px;margin:100px auto 300px" method="post" action="..\include\users\logreg\trsltr_login.php" onSubmit="return InputCheck(this)">
 							<div class="form-group">
 								 <h3 class="border-bottom">译员登录</h3>
 								<label for="exampleInputEmail1">
 									用户名
 								</label>
-								<input type="text" class="form-control" id="trsltrname" name="trsltrname" />
+								<input type="text" class="form-control" id="username" name="username" />
 							</div>
 							<div class="form-group">
 
