@@ -1,4 +1,3 @@
-
 <?php
 // 段孝辰
 $job = $_POST['job'];
@@ -16,7 +15,7 @@ if(strlen($password) < 6){
 //包含数据库连接文件
 include('..\..\conn.php');
 //检测用户名是否已经存在
-if($job='项目经理'){
+if($job=='项目经理'){
 	$sql ="select pm_ID from projectmanager where pm_Name='$username' limit 1";
 	$check_query = mysqli_query($conn,$sql, MYSQLI_STORE_RESULT );
 	if(mysqli_fetch_array($check_query, MYSQLI_ASSOC)){
@@ -28,7 +27,7 @@ if($job='项目经理'){
 	$regdate = time();
 	$sql = "INSERT INTO projectmanager(pm_Name,pm_Password)VALUES('$username','$password')";
 }
-else if($job='普通译员'){
+else if($job=='普通译员'){
 	$sql ="select translator_ID from translator where translator_Name='$username' limit 1";
 	$check_query = mysqli_query($conn,$sql, MYSQLI_STORE_RESULT );
 	if(mysqli_fetch_array($check_query, MYSQLI_ASSOC)){
