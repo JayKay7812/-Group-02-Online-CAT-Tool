@@ -33,7 +33,15 @@
 		button {background: transparent; border: none;}
 		button:hover {background-color:#f8f8f8}
 	</style>
-	
+	<style>
+		.ui-jqgrid tr.jqgrow td {
+		   white-space: normal !important;
+		   height:auto;
+		   vertical-align:text-top;
+		   padding-top:2px;
+		 }
+	</style>
+	<script type="text/javascript" src="../include/cat/translate/translation.js"></script>
   </head>
   <body bgcolor="#f8f8f8">
 
@@ -74,7 +82,7 @@
 			<div style="display: flex;">
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
-					<div><button><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
+					<div><button href="../include/cat/translate/translation.php?action=confirm"><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/import.png" width="30" height="30">导入</button></div>
@@ -115,33 +123,33 @@
 			
 			        $(document).ready(function () {
 			            $("#jqGrid").jqGrid({
-			                url: 'data.json',
+			                url: '../include/search.php?type=2',
 			                editurl: 'clientArray',
 			                datatype: "json",
 			                colModel: [
-			                    {
-									label: "ID",
-			                        name: 'ID',
-			                        width: 75
-			                    },
+			                
 			                    {
 									label: "Source Language",
-			                        name: 'Source Language',
+			                        name: 'sourceText',
 			                        width: 500,
 			                         // must set editable to true if you want to make the field editable
 			                    },
 			                    {
 									label: "Target Language",
-			                        name: 'Target Language',
+			                        name: 'targetText',
 			                        width: 500,
 			                        editable: true
 			                    },
-			                ],
+							],
+							rownumbers: true,
 							sortname: 'EmployeeID',
 							loadonce : true,
 							viewrecords: true,
 			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
-			                width: 1000,
+							ondblClickRow : function(id) {
+								
+							},
+							width: 1000,
 			                height: 550,   
 			            });
 			            var lastSelection;
