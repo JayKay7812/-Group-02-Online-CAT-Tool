@@ -1,12 +1,13 @@
 <?php
 	include('conn.php');
 	$userid=1;
+	$translation=1;
 	$type = $_GET['type'];
 	if($type==1){
 		$sql="select project_ID,project_Name,project_Language,project_progress,project_ddl,project_Status from project where PM_ID like '$userid'";
 	}
 	else if($type==2){
-		$sql="select * from project where PM_ID like '$userid'";
+		$sql="select sourceText,targetText from translationbase where translationsheet_ID='$translation'";
 	}
 	
 	$result=mysqli_query($conn,$sql);
