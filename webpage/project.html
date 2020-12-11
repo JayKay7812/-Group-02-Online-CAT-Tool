@@ -89,10 +89,10 @@
       						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newProjModal">
                     新建项目
       						</button>
-      						<button class="btn btn-secondary" type="button">
+      						<button class="btn btn-secondary" type="button" href="javascript:void(0)" id="cm1">
       							删除项目
       						</button>
-      						<button class="btn btn-secondary" type="button">
+      						<button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="editProj">
       							编辑项目
       						</button>
       						<button class="btn btn-secondary" type="button">
@@ -120,52 +120,57 @@
               <script type="text/javascript" id="seg">
                   $(document).ready(function () {
                       $("#jqGrid").jqGrid({
-                          url: 'data.json',
-                          editurl: 'clientArray',
+                          url: '/Group-02-Online-CAT-Tool/include/search0.php?type=1',
                           datatype: "json",
+                          editRow: "clientArray",
                           colModel: [
                               {
-                      label: "ID",
-                                  name: 'ID',
+                                  label:"项目ID",
+                                  name: 'project_ID',
                                   width: 75
                               },
                               {
-                      label: "项目名",
-                                  name: '项目名',
+                                  label:"项目名",
+                                  name: 'project_Name',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                      label: "语言对",
-                                  name: '语言对',
+                                  label: '源语言',
+                                  name: 'source_Language',
+                                  width: 50,
+                                   // must set editable to true if you want to make the field editable
+                              },
+                              {
+                                  label: '目标语言',
+                                  name: 'target_Language',
+                                  width: 50,
+                                   // must set editable to true if you want to make the field editable
+                              },
+                              {
+                                  label: '项目进度',
+                                  name: 'project_Status',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                      label: "项目进度",
-                                  name: '项目进度',
-                                  width: 100,
-                                   // must set editable to true if you want to make the field editable
-                              },
-                              {
-                      label: "截止日期",
-                                  name: '截止日期',
-                                  width: 100,
-                                   // must set editable to true if you want to make the field editable
-                              },
-                              {
-                      label: "当前状态",
-                                  name: '当前状态',
+                                  label: '截止日期',
+                                  name: 'due_Date',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                           ],
-                  sortname: 'EmployeeID',
-                  loadonce : true,
-                  viewrecords: true,
+                          sortname: 'ID',
+                          loadonce : true,
+                          viewrecords: true,
                           onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
                           width: 1000,
-                          height: 550,
+                          height: 500,
+                          page:1,
+                          pagerpos: "center",
+                          pgbuttons:true,
+                          multiselect : true,
+
                       });
                       var lastSelection;
                       function editRow(id) {
@@ -176,6 +181,18 @@
                               lastSelection = id;
                           }
                       }
+                  });
+                  jQuery("#cm1").click(function() {
+                    var s;
+                    i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                    s = jQuery("#jqGrid").getCell(i,"project_ID");
+                    alert(i);
+                  });
+                  jQuery("#editProj").click(function(){
+                    var s;
+                    i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                    s = jQuery("#jqGrid").getCell(i,"project_ID");
+                    window.location.href="project0.html?projectid="+s;
                   });
               </script>
         </div>
@@ -209,7 +226,7 @@
 		</div>
 	</div>
 </div>
-  <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+  <form action="/Group-02-Online-CAT-Tool/include/project/newproj.php" method="post" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
     <div class="modal fade" id="newProjModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -222,12 +239,11 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" role="form" >
                         <div class="form-group">
                             <label for="lastname" class="col-sm-3 control-label">项目名</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="projName" value="" id="projName"
-                                       placeholder="项目名">
+                                <input type="text" class="form-control" name="projName" id="projName" placeholder="项目名">
                             </div>
                         </div>
                         <div class="form-group">

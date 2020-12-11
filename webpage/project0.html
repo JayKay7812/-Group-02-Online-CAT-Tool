@@ -118,48 +118,54 @@
               <div id="jqGridPager"></div>
           </div>
               <script type="text/javascript" id="seg">
+              function getQueryVariable(variable)
+              {
+                 var query = window.location.search.substring(1);
+                 var vars = query.split("&");
+                 for (var i=0;i<vars.length;i++) {
+                         var pair = vars[i].split("=");
+                         if(pair[0] == variable){return pair[1];}
+                 }
+                 return(false);
+              }
+              var currenturl='/Group-02-Online-CAT-Tool/include/search0.php?type=2&projectid='+getQueryVariable("projectid");
                   $(document).ready(function () {
                       $("#jqGrid").jqGrid({
-                          url: 'data.json',
+                          url: currenturl,
                           editurl: 'clientArray',
                           datatype: "json",
                           colModel: [
                               {
-                      label: "ID",
-                                  name: 'ID',
+                                  label: "ID",
+                                  name: 'file_ID',
                                   width: 75
                               },
                               {
-                      label: "文件名",
-                                  name: '文件名',
+                                  label: "文件名",
+                                  name: 'file_Name',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                      label: "翻译进度",
-                                  name: '翻译进度',
+                                  label: "翻译状态",
+                                  name: 'file_Status',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                      label: "截止日期",
-                                  name: '截止日期',
-                                  width: 100,
-                                   // must set editable to true if you want to make the field editable
-                              },
-                              {
-                      label: "当前状态",
-                                  name: '当前状态',
+                                  label: "截止日期",
+                                  name: 'due_Date',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                           ],
-                  sortname: 'EmployeeID',
-                  loadonce : true,
-                  viewrecords: true,
+                          sortname: 'file_ID',
+                          loadonce : true,
+                          viewrecords: true,
                           onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
                           width: 1000,
                           height: 550,
+                          multiselect:true,
                       });
                       var lastSelection;
                       function editRow(id) {

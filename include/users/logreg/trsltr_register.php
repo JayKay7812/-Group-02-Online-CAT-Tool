@@ -14,9 +14,9 @@ if(strlen($password) < 6){
 }
 
 //包含数据库连接文件
-include('..\..\conn.php');
+include('/include/conn.php');
 //检测用户名是否已经存在
-if($job='项目经理'){
+if($job=='项目经理'){
 	$sql ="select pm_ID from projectmanager where pm_Name='$username' limit 1";
 	$check_query = mysqli_query($conn,$sql, MYSQLI_STORE_RESULT );
 	if(mysqli_fetch_array($check_query, MYSQLI_ASSOC)){
@@ -28,7 +28,7 @@ if($job='项目经理'){
 	$regdate = time();
 	$sql = "INSERT INTO projectmanager(pm_Name,pm_Password)VALUES('$username','$password')";
 }
-else if($job='普通译员'){
+else if($job=='普通译员'){
 	$sql ="select translator_ID from translator where translator_Name='$username' limit 1";
 	$check_query = mysqli_query($conn,$sql, MYSQLI_STORE_RESULT );
 	if(mysqli_fetch_array($check_query, MYSQLI_ASSOC)){
@@ -38,7 +38,7 @@ else if($job='普通译员'){
 	//写入数据
 	$password = MD5($password);
 	$regdate = time();
-	$sql = "INSERT INTO translator(translator_Name,translator_Password)VALUES('$username','$password')";
+	$sql = "INSERT INTO translator(`translator_Name`,`translator_Password`)VALUES('$username','$password')";
 }
 
 
@@ -46,7 +46,7 @@ else if($job='普通译员'){
 
 if(mysqli_query($conn,$sql)){
     echo "<script>alert('注册成功!');location.href='../../../webpage/login.html';</script>";
-    
+
 } else {
     echo '抱歉！添加数据失败：',mysqli_error($conn),'<br />';
     echo '点击此处 <a href="javascript:history.back(-1);">返回</a> 重试';
