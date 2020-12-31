@@ -8,7 +8,7 @@
 	}
 	else if($type==2){
 		$projectid = $_GET['projectid'];
-		$sql="SELECT file_ID, file_Name, file_Status, due_Date from filefortranslation where project_ID=$projectid";
+		$sql="SELECT translationsheet_ID, file_Name, sourceLanguage, targetLanguage from translationsheet where project_ID=$projectid";
 	}
 
 	$result=mysqli_query($conn,$sql);
@@ -25,6 +25,5 @@
 	    #array_push($arr,$row);
 
 	}
-	//print_r($arr);
 	echo json_encode($return);//json编码
 ?>

@@ -13,35 +13,27 @@
     <link href="../resource/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../resource/bootstrap/css/style.css" rel="stylesheet">
 
-	
+
 	<!-- The jQuery library is a prerequisite for all jqSuite products -->
     <script type="text/javascript" src="../resource/jqgrid/js/jquery.min.js"></script>
     <!-- We support more than 30 localizations -->
     <script type="text/javascript" src="../resource/jqgrid/js/grid.locale-en.js"></script>
-    <!-- This is the Javascript file of jqGrid -->   
+    <!-- This is the Javascript file of jqGrid -->
     <script type="text/javascript" src="../resource/jqgrid/js/jquery.jqGrid.min.js"></script>
     <!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../resource/jqgrid/css/ui.jqgrid-bootstrap.css" />
 	<script>
 		$.jgrid.defaults.width = 780;
 		$.jgrid.defaults.responsive = true;
 		$.jgrid.defaults.styleUI = 'Bootstrap';
 	</script>
-	
+
 	<style type="text/css">
 		button {background: transparent; border: none;}
 		button:hover {background-color:#f8f8f8}
 	</style>
-	<style>
-		.ui-jqgrid tr.jqgrow td {
-		   white-space: normal !important;
-		   height:auto;
-		   vertical-align:text-top;
-		   padding-top:2px;
-		 }
-	</style>
-	<script type="text/javascript" src="../include/cat/translate/translation.js"></script>
+
   </head>
   <body bgcolor="#f8f8f8">
 
@@ -82,7 +74,7 @@
 			<div style="display: flex;">
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
-					<div><button href="../include/cat/translate/translation.php?action=confirm"><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
+					<div><button><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/import.png" width="30" height="30">导入</button></div>
@@ -90,7 +82,7 @@
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/web-search.png" width="50" height="50">在线查询</button></div>
-					
+
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/bold.png" width="30" height="30">加粗</button>
@@ -112,45 +104,54 @@
 		</div>
 	</div>
 	<div class="row"  style="border-style:none;padding:0px;">
-		
-		
+
+
 		<div class="col-md-8"> <!--句段窗口-->
 			<div >
 			    <table id="jqGrid" ></table>
 			    <div id="jqGridPager"></div>
 			</div>
 			    <script type="text/javascript" id="seg">
-			
+              function getQueryVariable(variable)
+              {
+                 var query = window.location.search.substring(1);
+                 var vars = query.split("&");
+                 for (var i=0;i<vars.length;i++) {
+                         var pair = vars[i].split("=");
+                         if(pair[0] == variable){return pair[1];}
+                 }
+                 return(false);
+              }
+              var currenturl='/Group-02-Online-CAT-Tool/include/search0.php?type=3&fileid='+getQueryVariable("fileid");
 			        $(document).ready(function () {
 			            $("#jqGrid").jqGrid({
-			                url: '../include/search.php?type=2',
+			                url: 'currenturl',
 			                editurl: 'clientArray',
 			                datatype: "json",
 			                colModel: [
-			                
 			                    {
-									label: "Source Language",
+									            label: "ID",
+			                        name: 'translation_ID',
+			                        width: 75
+			                    },
+			                    {
+									            label: "Source Language",
 			                        name: 'sourceText',
 			                        width: 500,
 			                         // must set editable to true if you want to make the field editable
 			                    },
 			                    {
-									label: "Target Language",
+									            label: "Target Language",
 			                        name: 'targetText',
 			                        width: 500,
 			                        editable: true
 			                    },
-							],
-							rownumbers: true,
-							sortname: 'EmployeeID',
+			                ],
 							loadonce : true,
 							viewrecords: true,
 			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
-							ondblClickRow : function(id) {
-								
-							},
-							width: 1000,
-			                height: 550,   
+			                width: 1000,
+			                height: 550,
 			            });
 			            var lastSelection;
 			            function editRow(id) {
@@ -163,26 +164,26 @@
 			            }
 			        });
 			    </script>
-		</div> 
-		
-		
+		</div>
+
+
 		<div class="col-md-4"> <!--翻译记忆库与术语库结果-->
 			<div >
 			    <table id="jqGrid0"></table>
 			    <div id="jqGridPager"></div>
 			</div>
-			<script type="text/javascript"> 
-				
-			
+			<script type="text/javascript">
+
+
 			$(document).ready(function () {
-			
+
 					$("#jqGrid0").jqGrid({
 					url: 'data1.json',
 					datatype: "json",
 					 colModel: [
 						{ label: 'Source', name: 'Source', width: 200 },
 						{ label: '', name: '', width: 50 },
-						{ label: 'Target', name: 'Target', width: 200 },                
+						{ label: 'Target', name: 'Target', width: 200 },
 					],
 					viewrecords: true, // show the current page, data rang and total records on the toolbar
 					width: 550,
@@ -192,7 +193,7 @@
 					//pager: "#jqGridPager"
 				});
 			});
-			
+
 			 </script>
 		</div>
 	</div>
@@ -202,7 +203,7 @@
 document.getElementById("user_info").innerHTML="你好"; //显示登录信息
 </script>
 
-    
+
     <script src="resource/bootstrap/js/bootstrap.min.js"></script>
     <script src="resource/bootstrap/js/scripts.js"></script>
   </body>

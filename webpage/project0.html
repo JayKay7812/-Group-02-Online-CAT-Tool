@@ -23,7 +23,27 @@
   		$.jgrid.defaults.responsive = true;
   		$.jgrid.defaults.styleUI = 'Bootstrap';
   	</script>
+    <script>function http_post_data($url, $data_string) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json; charset=utf-8',
+            'Content-Length: ' . strlen($data_string))
+        );
+        ob_start();
+        curl_exec($ch);
+        $return_content = ob_get_contents();
+        ob_end_clean();
 
+        $return_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        return array($return_code, $return_content);
+        }
+        $url  = "http://xx.xx.cn";
+        $data = json_encode(array('a'=>1, 'b'=>2));
+        list($return_code, $return_content) = http_post_data($url, $data);
+    </script>
   	<style type="text/css">
   		button {background: transparent; border: none;}
   		button:hover {background-color:#f8f8f8}
@@ -92,7 +112,7 @@
       						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#exprtFileModal">
       							导出文件
       						</button>
-      						<button class="btn btn-secondary" type="button">
+      						<button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="editFile">
       							编辑文件
       						</button>
       						<button class="btn btn-secondary" type="button">
@@ -137,7 +157,7 @@
                           colModel: [
                               {
                                   label: "ID",
-                                  name: 'file_ID',
+                                  name: 'translationsheet_ID',
                                   width: 75
                               },
                               {
@@ -147,19 +167,19 @@
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                                  label: "翻译状态",
-                                  name: 'file_Status',
+                                  label: "源语言",
+                                  name: 'sourceLanguage',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                               {
-                                  label: "截止日期",
-                                  name: 'due_Date',
+                                  label: "目标语言",
+                                  name: 'targetLanguage',
                                   width: 100,
                                    // must set editable to true if you want to make the field editable
                               },
                           ],
-                          sortname: 'file_ID',
+                          sortname: 'translationsheet_ID',
                           loadonce : true,
                           viewrecords: true,
                           onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
@@ -176,6 +196,12 @@
                               lastSelection = id;
                           }
                       }
+                  });
+                  jQuery("#editFile").click(function(){
+                      var s;
+                      i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                      s = jQuery("#jqGrid").getCell(i,"file_ID");
+                      window.location.href="translation.html?fileid="+s;
                   });
               </script>
         </div>
@@ -210,7 +236,7 @@
 	</div>
 </div>
 <!--文件导入模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<form action="../include/file/upload.php" method="post" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" enctype="multipart/form-data" style="margin: 20px;">
   <div class="modal fade" id="imprtFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -227,7 +253,7 @@
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">文件名</label>
                           <div class="col-sm-9">
-                              <input type="text" class="form-control" name="projName" value="" id="projName"
+                              <input type="text" class="form-control" name="fileName" value="" id="projName"
                                      placeholder="文件名">
                           </div>
                       </div>
@@ -252,10 +278,9 @@
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">文件格式</label>
                           <div class="col-sm-9">
-                            <select class="form-control" name="targetLanguage" id="targetLanguage">
-                              <option value="tmx">html</option>
-                              <option value="xlxs">doc/docx</option>
-                              <option value="tmx">ppt</option>
+                            <select class="form-control" name="fileFormat" id="fileFormat">
+                              <option value="docx">doc/docx</option>
+                              <option value="pdf">PDF</option>
                               <option value="xlxs">xlxs</option>
                             </select>
                           </div>
@@ -263,7 +288,7 @@
                       <div class="form-group">
                           <label for="remark" class="col-sm-3 control-label">选择文件</label>
                           <div class="col-sm-9">
-                              <input  type="file" class="form-control"  name="slctFile" id="slctFile">
+                              <input  type="file" class="form-control"  name="file" id="file">
 
                               </input>
                           </div>

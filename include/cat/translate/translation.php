@@ -1,7 +1,1 @@
-<?php
-    $action = $_GET['action'];
-    switch($action){
-        case confirm:
-            
-    }
-?>
+// 段孝辰，秦浩洋
