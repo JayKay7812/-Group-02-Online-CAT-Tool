@@ -13,29 +13,38 @@
     <link href="../resource/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="../resource/bootstrap/css/style.css" rel="stylesheet">
 
-
+	
 	<!-- The jQuery library is a prerequisite for all jqSuite products -->
     <script type="text/javascript" src="../resource/jqgrid/js/jquery.min.js"></script>
     <!-- We support more than 30 localizations -->
     <script type="text/javascript" src="../resource/jqgrid/js/grid.locale-en.js"></script>
-    <!-- This is the Javascript file of jqGrid -->
+    <!-- This is the Javascript file of jqGrid -->   
     <script type="text/javascript" src="../resource/jqgrid/js/jquery.jqGrid.min.js"></script>
     <!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
     <link rel="stylesheet" type="text/css" media="screen" href="../resource/jqgrid/css/ui.jqgrid-bootstrap.css" />
 	<script>
 		$.jgrid.defaults.width = 780;
 		$.jgrid.defaults.responsive = true;
 		$.jgrid.defaults.styleUI = 'Bootstrap';
 	</script>
-
+	
 	<style type="text/css">
 		button {background: transparent; border: none;}
 		button:hover {background-color:#f8f8f8}
 	</style>
-
+	<style>
+		.ui-jqgrid tr.jqgrow td {
+		   white-space: normal !important;
+		   height:auto;
+		   vertical-align:text-top;
+		   padding-top:2px;
+		 }
+	</style>
+	<script src="../include/cat/translate/translation.js"></script>
+	
   </head>
-  <body bgcolor="#f8f8f8">
+  <body bgcolor="#f8f8f8" onload=>
 
     <div class="container-fluid">
 	<div class="row" style="border-style:none;margin-bottom:0px;padding-bottom:0px;">
@@ -73,8 +82,8 @@
 			<div>
 			<div style="display: flex;">
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
-					<div><button><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
+					<div><button data-toggle="modal" data-target="#myModal"><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
+					<div><button href="../include/cat/translate/translation.php?action=confirm"><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/import.png" width="30" height="30">导入</button></div>
@@ -82,7 +91,7 @@
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/web-search.png" width="50" height="50">在线查询</button></div>
-
+					
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/bold.png" width="30" height="30">加粗</button>
@@ -104,86 +113,89 @@
 		</div>
 	</div>
 	<div class="row"  style="border-style:none;padding:0px;">
-
-
+		
+		
 		<div class="col-md-8"> <!--句段窗口-->
 			<div >
 			    <table id="jqGrid" ></table>
 			    <div id="jqGridPager"></div>
 			</div>
 			    <script type="text/javascript" id="seg">
-              function getQueryVariable(variable)
-              {
-                 var query = window.location.search.substring(1);
-                 var vars = query.split("&");
-                 for (var i=0;i<vars.length;i++) {
-                         var pair = vars[i].split("=");
-                         if(pair[0] == variable){return pair[1];}
-                 }
-                 return(false);
-              }
-              var currenturl='/Group-02-Online-CAT-Tool/include/search0.php?type=3&fileid='+getQueryVariable("fileid");
+					var id=$.get("translationsheet_ID");
 			        $(document).ready(function () {
 			            $("#jqGrid").jqGrid({
-			                url: 'currenturl',
-			                editurl: 'clientArray',
+			                url: '../include/search0.php?type=3&translationsheet_ID='+id,
+							editurl: '../include/cat/translate/translation.php?action=confirm',
+							mtype: 'POST',
 			                datatype: "json",
 			                colModel: [
-			                    {
-									            label: "ID",
+								{
+									label: "ID",
 			                        name: 'translation_ID',
-			                        width: 75
+									width: 0.1,
+									
 			                    },
 			                    {
-									            label: "Source Language",
+									label: "源语言",
 			                        name: 'sourceText',
 			                        width: 500,
 			                         // must set editable to true if you want to make the field editable
 			                    },
 			                    {
-									            label: "Target Language",
+									label: "目标语言",
 			                        name: 'targetText',
 			                        width: 500,
 			                        editable: true
 			                    },
-			                ],
+							],
+							rownumbers: true,
+							sortname: 'EmployeeID',
 							loadonce : true,
 							viewrecords: true,
 			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
-			                width: 1000,
-			                height: 550,
+							
+							width: 1000,
+			                height: 550,   
 			            });
 			            var lastSelection;
 			            function editRow(id) {
 			                if (id && id !== lastSelection) {
+								var s;
+								var i;
+                    			i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+								tid = jQuery("#jqGrid").getCell(i,"translation_ID");
+								s = jQuery("#jqGrid").getCell(i,"sourceText");
 			                    var grid = $("#jqGrid");
-			                    grid.jqGrid('restoreRow',lastSelection);
-			                    grid.jqGrid('editRow',id, {keys: true} );
-			                    lastSelection = id;
+								grid.jqGrid('restoreRow',lastSelection);
+								editparameters={keys: true,extraparam:{translation_ID: tid,sourceText:s}};
+			                    grid.jqGrid('editRow',id, editparameters);
+								lastSelection = id;
+								
 			                }
-			            }
+						}
+						
 			        });
 			    </script>
-		</div>
-
-
+		</div> 
+		
+		
 		<div class="col-md-4"> <!--翻译记忆库与术语库结果-->
 			<div >
 			    <table id="jqGrid0"></table>
 			    <div id="jqGridPager"></div>
 			</div>
-			<script type="text/javascript">
-
-
+			<script type="text/javascript"> 
+				
+			
 			$(document).ready(function () {
-
+			
 					$("#jqGrid0").jqGrid({
 					url: 'data1.json',
 					datatype: "json",
 					 colModel: [
 						{ label: 'Source', name: 'Source', width: 200 },
 						{ label: '', name: '', width: 50 },
-						{ label: 'Target', name: 'Target', width: 200 },
+						{ label: 'Target', name: 'Target', width: 200 },                
 					],
 					viewrecords: true, // show the current page, data rang and total records on the toolbar
 					width: 550,
@@ -193,18 +205,50 @@
 					//pager: "#jqGridPager"
 				});
 			});
-
+			
 			 </script>
 		</div>
 	</div>
 </div>
+<!-- 模态框（添加术语） -->
+<form method="post" action="translation.php?action=addterm" class="form-horizontal" role="form" id="form_data" style="margin: 20px;" ></form>
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加术语</h4>
+            </div>
+            <div class="modal-body">
+			<form class="form-horizontal" role="form">
+			<div><b>添加到术语表：</div></b>
+			<select name="termsheet" id="termsheet"></select>
+			<div><b>中文：</div></b>
+			<input type="text" name="zh_CN" id="zh">
+			<div><b>英文：</div></b>
+			<input type="text" name="en_US" id="en">
+			<div><b>术语释义：</div></b>
+			<textarea id="definition"></textarea>
+			<div><b>是否为停用词：</div></b>
+			<input type="radio" name="stopword" value="yes" id="1">是
+			<input type="radio" name="stopword" value="no" id="2">否
+			</form>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <input type="submit" value="添加" class="btn btn-primary" id="termsubmit"/>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</form>
 
 <script>
 document.getElementById("user_info").innerHTML="你好"; //显示登录信息
 </script>
 
-
-    <script src="resource/bootstrap/js/bootstrap.min.js"></script>
-    <script src="resource/bootstrap/js/scripts.js"></script>
+    
+    <script src="../resource/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../resource/bootstrap/js/scripts.js"></script>
   </body>
 </html>

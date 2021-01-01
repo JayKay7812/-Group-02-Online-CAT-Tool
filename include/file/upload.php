@@ -10,7 +10,7 @@
     {
       if (file_exists("upload/" . $_FILES["file"]["name"]))
       {
-        echo '<script>alert("文件已存在！");window.location.href="/Group-02-Online-CAT-Tool/webpage/project0.html";</script>';
+        echo '<script>alert("文件已存在！");window.location.href="../../webpage/project0.html";</script>';
       }
       else
       {
@@ -33,7 +33,7 @@
           echo '<script type="text/javaScript">alert("导入文件失败！");点击此处 <a href="javascript:history.back(-1);">返回</a> 重试</script>';
           echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
-        //echo '<script>alert("导入文件成功！");window.location.href="/Group-02-Online-CAT-Tool/webpage/project0.html";</script>';
+        echo '<script>alert("导入文件成功！");window.location.href="../../webpage/project0.html";</script>';
       }
     }
     include ('../API/parser.php');
