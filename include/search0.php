@@ -1,14 +1,20 @@
 <?php
 	include('conn.php');
-	$userid=1;
+	$userid=0;
 	$type = $_GET['type'];
-
+	$translationid=$_GET['translationsheet_ID'];
 	if($type==1){
 		$sql="SELECT project_ID,project_Name,source_Language,target_Language,project_Status,due_Date FROM project where PM_ID like '$userid'";
 	}
 	else if($type==2){
 		$projectid = $_GET['projectid'];
 		$sql="SELECT translationsheet_ID, file_Name, sourceLanguage, targetLanguage from translationsheet where project_ID=$projectid";
+	}
+	else if($type==3){
+		$sql="select translation_ID,sourceText,targetText from translationbase where translationsheet_ID='$translationid'";
+	}
+	else if($type==4){
+		$sql="select tbsheet_Name from termsheet";
 	}
 
 	$result=mysqli_query($conn,$sql);
