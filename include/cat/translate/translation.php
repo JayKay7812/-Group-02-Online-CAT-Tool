@@ -33,6 +33,7 @@
         $zh_CN=$_POST["zh_CN"];
         $en_US=$_POST["en_US"];
         $definition=$_POST["definition"];
+<<<<<<< HEAD
         $property=$_POST["stopword"];
         $ts_id=mysqli_fetch_assoc(mysqli_query($conn, "select tbsheet_ID from termsheet where tbsheet_Name='$termsheet'"));
         $tb_id=$ts_id["tbsheet_ID"];
@@ -46,6 +47,12 @@
         else {
             echo "error:".mysqli_error($conn);
         }
+=======
+        $property=$_POST["property"];
+        $ts_id=mysqli_query($conn, "select termsheet_ID from termsheet where termsheet_Name='$termsheet'");
+
+        $addterm_sql = "INSERT INTO termbase (termsheet_ID,sourceText,targetText,term_Definition,term_Property) VALUES ($ts_id,'$zh_CN','$en_US',$definition','$property')";
+>>>>>>> 1f63671a6e67a979468d40182613951addb39c21
     }  
     
 ?>
