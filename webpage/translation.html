@@ -44,7 +44,7 @@
 	<script src="../include/cat/translate/translation.js"></script>
 	
   </head>
-  <body bgcolor="#f8f8f8" onload=>
+  <body bgcolor="#f8f8f8">
 
     <div class="container-fluid">
 	<div class="row" style="border-style:none;margin-bottom:0px;padding-bottom:0px;">
@@ -120,10 +120,6 @@
 			    <table id="jqGrid" ></table>
 			    <div id="jqGridPager"></div>
 			</div>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
 				<script type="text/javascript" id="seg">
 					function getQueryVariable(variable)
 					{
@@ -136,13 +132,6 @@
        					return(false);
 					}
 					var id=getQueryVariable("translationsheet_ID");
-<<<<<<< HEAD
-=======
-=======
-			    <script type="text/javascript" id="seg">
-					var id=$.get("translationsheet_ID");
->>>>>>> 10de76788a46efa99b29fc66d9de366bfd8a7431
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
 			        $(document).ready(function () {
 			            $("#jqGrid").jqGrid({
 			                url: '../include/search0.php?type=3&translationsheet_ID='+id,
@@ -232,11 +221,7 @@
 	</div>
 </div>
 <!-- 模态框（添加术语） -->
-<<<<<<< HEAD
 <form class="form-horizontal" role="form"  style="margin: 20px;" ></form>
-=======
-<form method="post" action="translation.php?action=addterm" class="form-horizontal" role="form" id="form_data" style="margin: 20px;" ></form>
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
 <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -245,11 +230,7 @@
                 <h4 class="modal-title" id="myModalLabel">添加术语</h4>
             </div>
             <div class="modal-body">
-<<<<<<< HEAD
 			<form class="form-horizontal" role="form" id="form_data">
-=======
-			<form class="form-horizontal" role="form">
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
 			<div><b>添加到术语表：</div></b>
 			<select name="termsheet" id="termsheet"></select>
 			<div><b>中文：</div></b>
@@ -257,26 +238,15 @@
 			<div><b>英文：</div></b>
 			<input type="text" name="en_US" id="en">
 			<div><b>术语释义：</div></b>
-<<<<<<< HEAD
 			<textarea id="definition" name="definition"></textarea>
 			<div><b>是否为停用词：</div></b>
 			<input type="radio" name="stopword" value="yes">是
 			<input type="radio" name="stopword" value="no">否
-=======
-			<textarea id="definition"></textarea>
-			<div><b>是否为停用词：</div></b>
-			<input type="radio" name="stopword" value="yes" id="1">是
-			<input type="radio" name="stopword" value="no" id="2">否
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
 			</form>
 			</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-<<<<<<< HEAD
                 <input type="button" class="btn btn-primary" data-dismiss="modal" value="添加" id="termsubmit" onclick=termsub()>
-=======
-                <input type="submit" value="添加" class="btn btn-primary" id="termsubmit"/>
->>>>>>> 1f63671a6e67a979468d40182613951addb39c21
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
