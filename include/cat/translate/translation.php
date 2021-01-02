@@ -1,1 +1,51 @@
-// 段孝辰，秦浩洋
+<?php
+    include("../../conn.php");
+    $action = $_GET['action'];
+    
+    if($action=='confirm')
+    {
+        $transID=$_POST["translation_ID"];
+        $srclan=$_POST["sourceText"];
+        $tarlan=$_POST["targetText"];
+        $update_sql = "UPDATE `translationbase`SET targetText='$tarlan' WHERE translation_ID='$transID'";
+        $addTM_sql = "INSERT INTO translationmemorybase (sourceText,targertText) VALUES ('$srclan','$tarlan')";
+        if(mysqli_query($conn, $update_sql)){
+            
+            echo $transID;
+            echo $scrlan;
+            echo $tarlan;
+        }
+        else {
+            echo "error:".mysqli_error($conn);
+        }
+        
+        if(mysqli_query($conn, $addTM_sql)){
+            
+            echo "chenggong";
+        }
+        else {
+            echo "error:".mysqli_error($conn);
+        }
+    }
+    else if($action=="addterm")
+    {
+        $termsheet=$_POST["termsheet"];
+        $zh_CN=$_POST["zh_CN"];
+        $en_US=$_POST["en_US"];
+        $definition=$_POST["definition"];
+        $property=$_POST["stopword"];
+        $ts_id=mysqli_fetch_assoc(mysqli_query($conn, "select tbsheet_ID from termsheet where tbsheet_Name='$termsheet'"));
+        $tb_id=$ts_id["tbsheet_ID"];
+        echo $tb_id;
+        $addterm_sql = "INSERT INTO termbase (tbsheet_ID,zh_CN,en_US,term_Definition,term_Property) VALUES ($tb_id,'$zh_CN','$en_US','$definition','$property')";
+        
+        if(mysqli_query($conn, $addterm_sql)){
+            
+            echo "chenggong";
+        }
+        else {
+            echo "error:".mysqli_error($conn);
+        }
+    }  
+    
+?>

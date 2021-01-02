@@ -148,7 +148,7 @@
                  }
                  return(false);
               }
-              var currenturl='/Group-02-Online-CAT-Tool/include/search0.php?type=2&projectid='+getQueryVariable("projectid");
+              var currenturl='../include/search0.php?type=2&projectid='+getQueryVariable("projectid");
                   $(document).ready(function () {
                       $("#jqGrid").jqGrid({
                           url: currenturl,
@@ -200,8 +200,8 @@
                   jQuery("#editFile").click(function(){
                       var s;
                       i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-                      s = jQuery("#jqGrid").getCell(i,"file_ID");
-                      window.location.href="translation.html?fileid="+s;
+                      s = jQuery("#jqGrid").getCell(i,"translationsheet_ID");
+                      window.location.href="translation.html?translationsheet_ID="+s;
                   });
               </script>
         </div>
