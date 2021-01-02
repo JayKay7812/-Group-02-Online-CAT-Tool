@@ -17,6 +17,7 @@ $("#termsubmit").click(function addterm()
     var def=$("#definition").val();
     var stopword=$("input:radio:checked").val();
     $.post("translation.php?action=addterm", { termsheet: ts, zh_CN: zh, en_US:en, definition:def, property:stopword } );
+<<<<<<< HEAD
 });
 function getQueryVariable(variable)
 {
@@ -28,3 +29,6 @@ function getQueryVariable(variable)
        }
        return(false);
 }
+=======
+});
+>>>>>>> 10de76788a46efa99b29fc66d9de366bfd8a7431
