@@ -159,7 +159,6 @@
 			                    },
 							],
 							rownumbers: true,
-							sortname: 'EmployeeID',
 							loadonce : true,
 							viewrecords: true,
 			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
@@ -172,15 +171,45 @@
 			                if (id && id !== lastSelection) {
 								var s;
 								var i;
+								var tsid=getQueryVariable("translationsheet_ID");
                     			i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
 								tid = jQuery("#jqGrid").getCell(i,"translation_ID");
 								s = jQuery("#jqGrid").getCell(i,"sourceText");
 			                    var grid = $("#jqGrid");
 								grid.jqGrid('restoreRow',lastSelection);
-								editparameters={keys: true,extraparam:{translation_ID: tid,sourceText:s}};
+								editparameters={keys: true,extraparam:{translationsheet_ID:tsid,translation_ID: tid,sourceText:s}};
 			                    grid.jqGrid('editRow',id, editparameters);
 								lastSelection = id;
+								jQuery("#jqGrid0").jqGrid('clearGridData');
 								
+								$.ajax(
+            					{
+            					    url: "http://127.0.0.1:5000/process/"+tsid+"/"+id,
+            					    type: "GET",
+            					    success: function (result) {
+										data=result["data"];
+										term=data["term"];
+										tm=data["tm"];
+
+										for ( var i = 0; i <= term.length; i++){
+										  jQuery("#jqGrid0").jqGrid('addRowData', i + 1, term[i]);
+										  
+										}
+										for ( var i = 0; i <= tm.length; i++){
+										  jQuery("#jqGrid0").jqGrid('addRowData', i + 1, tm[i]);
+										}
+										text=jQuery("#jqGrid").jqGrid('getCell', id, "sourceText");
+										var words = text.split(/\s+^\w/);
+										console.log(words);
+            					    },
+            					    error: function (xhr, status, p3, p4) {
+            					        var err = "Error " + " " + status + " " + p3;
+            					        if (xhr.responseText && xhr.responseText[0] == "{")
+            					            err = JSON.parse(xhr.responseText).message;
+            					        alert(err);
+            					    }
+								});
+								jQuery("#jqGrid0").trigger("reloadGrid");
 			                }
 						}
 						
@@ -200,19 +229,20 @@
 			$(document).ready(function () {
 			
 					$("#jqGrid0").jqGrid({
-					url: '',
-					datatype: "json",
+					datatype: "local",
 					 colModel: [
 						{ label: 'Source', name: 'Source', width: 200 },
-						{ label: '', name: '', width: 50 },
+						{ label: '', name: 'rate', width: 60 },
 						{ label: 'Target', name: 'Target', width: 200 },                
 					],
-					viewrecords: true, // show the current page, data rang and total records on the toolbar
+					
 					width: 550,
 					height: 550,
 					rowNum: 30,
 					loadonce: true, // this is just for the demo
 					//pager: "#jqGridPager"
+					viewrecords: false,
+					
 				});
 			});
 			

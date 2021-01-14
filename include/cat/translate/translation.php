@@ -7,24 +7,32 @@
         $transID=$_POST["translation_ID"];
         $srclan=$_POST["sourceText"];
         $tarlan=$_POST["targetText"];
+        $tsid=$_POST["translationsheet_ID"];
+
         $update_sql = "UPDATE `translationbase`SET targetText='$tarlan' WHERE translation_ID='$transID'";
-        $addTM_sql = "INSERT INTO translationmemorybase (sourceText,targertText) VALUES ('$srclan','$tarlan')";
         if(mysqli_query($conn, $update_sql)){
             
-            echo $transID;
-            echo $scrlan;
-            echo $tarlan;
+            echo "更新成功";
         }
         else {
             echo "error:".mysqli_error($conn);
         }
-        
-        if(mysqli_query($conn, $addTM_sql)){
-            
-            echo "chenggong";
+        $check_sql="select sourceText,targertText from translationmemorybase where sourceText='$srclan' and targertText='$tarlan'";
+        if(mysqli_query($conn, $check_sql)!=NULL)
+        {
+            $s=mysqli_fetch_assoc(mysqli_query($conn, $check_sql));
+            echo $s;
+            echo "有重复";
         }
-        else {
-            echo "error:".mysqli_error($conn);
+        else{
+            $addTM_sql = "INSERT INTO translationmemorybase (translationsheet_ID,sourceText,targertText) VALUES ($tsid,'$srclan','$tarlan')";
+            if(mysqli_query($conn, $addTM_sql)){
+
+                echo "插入成功";
+            }
+            else {
+                echo "error:".mysqli_error($conn);
+            }
         }
     }
     else if($action=="addterm")
