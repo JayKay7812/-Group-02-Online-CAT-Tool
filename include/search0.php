@@ -1,20 +1,34 @@
 <?php
 	include('conn.php');
+
 	$userid=0;
 	$type = $_GET['type'];
 	$translationid=$_GET['translationsheet_ID'];
-	if($type==1){
+	if($type==1){ //显示项目
 		$sql="SELECT project_ID,project_Name,source_Language,target_Language,project_Status,due_Date FROM project where PM_ID like '$userid'";
 	}
-	else if($type==2){
+	else if($type==2){ //显示项目内待翻译文件
 		$projectid = $_GET['projectid'];
 		$sql="SELECT translationsheet_ID, file_Name, sourceLanguage, targetLanguage from translationsheet where project_ID=$projectid";
 	}
-	else if($type==3){
+	else if($type==3){ //显示句段
 		$sql="select translation_ID,sourceText,targetText from translationbase where translationsheet_ID='$translationid'";
 	}
-	else if($type==4){
+	else if($type==4){ //添加术语功能下拉菜单
 		$sql="select tbsheet_Name from termsheet";
+	}
+	else if($type==5){ //显示翻译记忆库
+		$sql="SELECT tmsheet_ID,tmsheet_Name,sourceLanguage,targetLanguage,tmsheet_Status FROM translationmemorysheet where owner_ID like '$userid'";
+	}
+	else if($type==6){ //显示翻译记忆库内所有翻译记忆
+		$id = $_GET["id"];
+		$sql="select tm_ID, sourceText, targertText from translationmemorybase where tmsheet_ID=$id";
+	}
+	else if($type==11){
+		$sql="SELECT * FROM translationmemorysheet";
+	}
+	else if($type==12){
+		$sql="SELECT * FROM termsheet";
 	}
 
 	$result=mysqli_query($conn,$sql);

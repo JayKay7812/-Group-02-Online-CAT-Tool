@@ -23,7 +23,11 @@
   		$.jgrid.defaults.responsive = true;
   		$.jgrid.defaults.styleUI = 'Bootstrap';
   	</script>
-
+    <script type="text/javascript">
+    $('.m2').on("click", function () {
+          $('#secondmodal').modal();
+      });
+    </script>
   	<style type="text/css">
   		button {background: transparent; border: none;}
   		button:hover {background-color:#f8f8f8}
@@ -80,6 +84,11 @@
 							<a class="nav-link" href="recycle.html">回收站</a>
 						</li>
 					</ul>
+          <ul>
+            <li>
+              <a class="nav-link" href="">网络检索设置</a>
+            </li>
+          </ul>
 				</div>
 				<div class="col-md-10 border">
           <nav class="navbar">
@@ -255,7 +264,6 @@
                               </select>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="lastname" class="col-sm-3 control-label">目标语言</label>
                             <div class="col-sm-9">
@@ -270,8 +278,45 @@
                             <div class="col-sm-9">
                                 <input  type="date" class="form-control"  name="dueDate" id="dueDate"
                                        placeholder="截止日期">
-
                                 </input>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-3 control-label">TM设置</label>
+                            <div class="col-sm-9">
+                              <select class="form-control" name="tmSetting" id="tmSetting">
+                                <script type="text/javascript">
+                                $("#tmSetting").ready(function select()
+                                {
+                                    
+                                    $.getJSON("../include/search0.php?type=11",function(result){
+                                        $.each(result["rows"],function(i,val){
+                                            var txt="<option value="+val["tmsheet_ID"]+">"+val["tmsheet_Name"]+"</option>";
+                                            $("#tmSetting").append(txt);
+                                        })
+                                    });
+                                });
+                                </script>
+                              </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-3 control-label">TB设置</label>
+                            <div class="col-sm-9">
+                              <select class="form-control" name="tbSetting" id="tbSetting">
+                                <script type="text/javascript">
+                                $("#tbSetting").ready(function select()
+                                {
+                                    
+                                    $.getJSON("../include/search0.php?type=12",function(result){
+                                        $.each(result["rows"],function(i,val){
+                                            var txt="<option value="+val["tbsheet_ID"]+">"+val["tbsheet_Name"]+"</option>";
+                                            $("#tbSetting").append(txt);
+                                        })
+                                    });
+                                });
+                                </script>
+                              </select>
                             </div>
                         </div>
                     </form>
@@ -279,14 +324,27 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button type="submit" class="btn btn-primary">
-                        提交
-                    </button><span id="tip"> </span>
+                      <button type="submit" class="btn btn-primary">
+                        <span class="m2">提交</span>
+                      </button>
+                    <span id="tip"> </span>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
   </form>
+  <div id="secondmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm2" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <div class="icon-"><img src="/assets/app/images/yulan.png" alt="1"></div>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="../resource/bootstrap/js/bootstrap.min.js"></script>
     <script src="../resource/bootstrap/js/scripts.js"></script>
   </body>

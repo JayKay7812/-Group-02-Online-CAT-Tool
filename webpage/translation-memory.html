@@ -23,7 +23,7 @@
   		$.jgrid.defaults.responsive = true;
   		$.jgrid.defaults.styleUI = 'Bootstrap';
   	</script>
-
+    <script src="../include/cat/tm/tm.js"></script>
   	<style type="text/css">
   		button {background: transparent; border: none;}
   		button:hover {background-color:#f8f8f8}
@@ -86,19 +86,19 @@
             <ul class="nav nav-pills">
               <li>
                 <div class="btn-group btn-group-lg boreder" role="group">
-      						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTMModal">
+      						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTBModal">
       							新建TM
       						</button>
-                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTMModal">
+                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
       							导入TM
       						</button>
-                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTMModal">
+                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
       							导出TM
       						</button>
       						<button class="btn btn-secondary" type="button">
       							删除TM
       						</button>
-      						<button class="btn btn-secondary" type="button">
+      						<button class="btn btn-secondary" type="button" id="edittm">
       							编辑TM
       						</button>
       					</div>
@@ -119,38 +119,46 @@
                 <script type="text/javascript" id="seg">
                     $(document).ready(function () {
                         $("#jqGrid").jqGrid({
-                            url: 'data.json',
+                            url: '../include/search0.php?type=5',
                             editurl: 'clientArray',
                             datatype: "json",
                             colModel: [
                                 {
                         label: "ID",
-                                    name: 'ID',
-                                    width: 75
+                                    name: 'tmsheet_ID',
+                                    width: 40,
                                 },
                                 {
                         label: "TM名",
-                                    name: 'TM名',
+                                    name: 'tmsheet_Name',
                                     width: 100,
                                      // must set editable to true if you want to make the field editable
                                 },
                                 {
-                        label: "语言对",
-                                    name: '语言对',
+                        label: "源语言",
+                                    name: 'sourceLanguage',
+                                    width: 100,
+                                     // must set editable to true if you want to make the field editable
+                                },
+                                {
+                        label: "目标语言",
+                                    name: 'targetLanguage',
                                     width: 100,
                                      // must set editable to true if you want to make the field editable
                                 },
                                 {
                         label: "当前状态",
-                                    name: '当前状态',
+                                    name: 'tmsheet_Status',
                                     width: 100,
                                      // must set editable to true if you want to make the field editable
                                 },
                             ],
-                    sortname: 'EmployeeID',
-                    loadonce : true,
-                    viewrecords: true,
-                            onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
+                            sortname: 'EmployeeID',
+                            rownumbers: true,
+                            loadonce : true,
+                            viewrecords: true,
+                            
+                            ondblClickRow: editRow,
                             width: 1000,
                             height: 550,
                         });
@@ -161,8 +169,15 @@
                                 grid.jqGrid('restoreRow',lastSelection);
                                 grid.jqGrid('editRow',id, {keys: true} );
                                 lastSelection = id;
+                                window.location.href="transmemory_edit.html?id="+id;
                             }
                         }
+                        jQuery("#edittm").click(function(){
+                            var s;
+                            i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            s = jQuery("#jqGrid").getCell(i,"tmsheet_ID");
+                            window.location.href="transmemory_edit.html?id="+s;
+                        });
                     });
                 </script>
           </div>
@@ -197,7 +212,7 @@
 	</div>
 </div>
 <!--TM新建模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<form method="post" action="../include/cat/tm/tm.php?action=newtm" class="form-horizontal" role="form" id="form_data"  style="margin: 20px;">
   <div class="modal fade" id="newTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -210,20 +225,19 @@
                   </h4>
               </div>
               <div class="modal-body">
-                  <form class="form-horizontal" role="form">
+                  <form class="form-horizontal" role="form" id="newtm">
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">TM名</label>
                           <div class="col-sm-9">
-                              <input type="text" class="form-control" name="tbName" value="" id="tbName"
-                                     placeholder="TM名">
+                              <input type="text" class="form-control" name="tmName" value="" id="tbName">
                           </div>
                       </div>
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">源语言</label>
                           <div class="col-sm-9">
                             <select class="form-control" name="sourceLanguage" id="sourceLanguage">
-                              <option value="zh-CN">zh-CN</option>
-                              <option value="en-US">en-US</option>
+                              <option value="zh_CN">zh_CN</option>
+                              <option value="en_US">en_US</option>
                             </select>
                           </div>
                       </div>
@@ -232,8 +246,8 @@
                           <label for="lastname" class="col-sm-3 control-label">目标语言</label>
                           <div class="col-sm-9">
                             <select class="form-control" name="targetLanguage" id="targetLanguage">
-                              <option value="zh-CN">zh-CN</option>
-                              <option value="en-US">en-US</option>
+                              <option value="zh_CN">zh_CN</option>
+                              <option value="en_US">en_US</option>
                             </select>
                           </div>
                       </div>
