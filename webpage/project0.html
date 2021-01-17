@@ -44,7 +44,7 @@
         $data = json_encode(array('a'=>1, 'b'=>2));
         list($return_code, $return_content) = http_post_data($url, $data);
     </script>
-  	<style type="text/css">
+    <style type="text/css">
   		button {background: transparent; border: none;}
   		button:hover {background-color:#f8f8f8}
   	</style>
@@ -109,17 +109,11 @@
       						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#imprtFileModal">
                     导入文件
       						</button>
-      						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#exprtFileModal">
+      						<button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="expFile">
       							导出文件
       						</button>
       						<button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="editFile">
       							编辑文件
-      						</button>
-      						<button class="btn btn-secondary" type="button">
-                    删除文件
-      						</button>
-                  <button class="btn btn-secondary" type="button">
-                    结项
       						</button>
                 </div>
               </li>
@@ -148,7 +142,12 @@
                  }
                  return(false);
               }
-              var currenturl='../include/search0.php?type=2&projectid='+getQueryVariable("projectid");
+              var currenturl='/Group-02-Online-CAT-Tool/include/search0.php?type=2&projectid='+getQueryVariable("projectid");
+              $("#test").ready(function loadid(){
+                  $s=getQueryVariable("projectid");
+                  document.getElementById('projectid').value=$s;
+              });
+
                   $(document).ready(function () {
                       $("#jqGrid").jqGrid({
                           url: currenturl,
@@ -185,7 +184,6 @@
                           onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
                           width: 1000,
                           height: 550,
-                          multiselect:true,
                       });
                       var lastSelection;
                       function editRow(id) {
@@ -201,8 +199,20 @@
                       var s;
                       i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                       s = jQuery("#jqGrid").getCell(i,"translationsheet_ID");
-                      lan = jQuery("#jqGrid").getCell(i,"sourceLanguage");
-                      window.location.href="translation.html?translationsheet_ID="+s+"&lan="+lan;
+                      window.location.href="translation.html?fileid="+s;
+                  });
+                  jQuery("#expFile").click(function(){
+                    var s1;
+                    i1 = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                    s1 = jQuery("#jqGrid").getCell(i1,"translationsheet_ID");
+                    if(s1)
+                    {
+                      window.location.href="../include/API/exporter.php?translationsheetid="+s1;
+                    }
+                    else
+                    {
+                      alert("请选择一个文件以继续。");window.location.href="javascript:history.back(-1);";
+                    }
                   });
               </script>
         </div>
@@ -251,6 +261,11 @@
               </div>
               <div class="modal-body">
                   <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="projectid" id="projectid" >
+                        </div>
+                    </div>
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">文件名</label>
                           <div class="col-sm-9">
@@ -290,7 +305,6 @@
                           <label for="remark" class="col-sm-3 control-label">选择文件</label>
                           <div class="col-sm-9">
                               <input  type="file" class="form-control"  name="file" id="file">
-
                               </input>
                           </div>
                       </div>
@@ -308,7 +322,7 @@
   </div>
 </form>
 <!--文件导出模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<form method="post" action="../include/API/exporter.php" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
   <div class="modal fade" id="exprtFileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -323,9 +337,8 @@
               <div class="modal-body">
                   <form class="form-horizontal" role="form">
                       <div class="form-group">
-                          <label for="lastname" class="col-sm-3 control-label">导出路径</label>
                           <div class="col-sm-9">
-                            <input type="file" name="" value="">
+                              <input type="text" class="form-control" name="projectid" id="projectid" >
                           </div>
                       </div>
                   </form>

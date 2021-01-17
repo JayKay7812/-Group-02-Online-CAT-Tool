@@ -1,5 +1,6 @@
 <?php
   include ('../conn.php');
+
   use PhpOffice\PhpWord\PhpWord;
   use PhpOffice\PhpWord\IOFactory;
   use \Smalot\PdfParser\Parser;
@@ -11,23 +12,47 @@
   {
     require 'PhpWord/vendor/autoload.php';
     $phpWord = new PhpWord();
-    $sections = IOFactory::load($file)->getSections();
-    $srctxt="";
-    foreach($sections as $section)
+    function getTextElement($E)
     {
-      $elements=$section->getElements();
-      foreach($elements as $element)
+      $sections = IOFactory::load($E)->getSections();
+      $srctxt="";
+      foreach($sections as $section)
       {
-        if($element!="TextBreak")
-        {
-          $subelement=$element->getElements();
-          foreach($subelement as $finaly){
-            $srctxt=$srctxt.$finaly->getText();
-          }
+            $elements=$section->getElements();
+            $xas='';
+            $result = [];
+            $inResult=[];
+            $text=[];
+            foreach($elements as $inE) {
+                $ns = get_class($inE);
+                $elName = explode('\\', $ns)[3];
+                print_r("name=".$elName."//");
+                if($elName == 'TextRun') {
+                  print_r("TextRunStart:");
+                  $subelement=$inE->getElements();
+                  foreach($subelement as $finaly){
+                    $ns1 = get_class($finaly);
+                    $elName1 = explode('\\', $ns1)[3];
+                    print_r("name1=".$elName1.",");
+                    if($elName1 == "Text")
+                    {
+                      $srctxt=$srctxt.$finaly->getText();
+                      print_r("TextPart:".$finaly->getText());
+                    }
+                  }
+                  echo '</br>';
+                }
+                else if($elName == "PreserveText")
+                {
+                  print_r($inE->getText()[4]);
+                  $srctxt=$srctxt.$inE->getText()[4]."\n";
+                }
         }
+      print_r($srctxt);
+      return $srctxt;
       }
     }
-    print($srctxt);
+    $srctxt=getTextElement($file);
   }
   else if($ftype=="pdf")
   {
@@ -49,7 +74,7 @@
         $cellIterator->setIterateOnlyExistingCells(TRUE);
         foreach ($cellIterator as $cell) {
             $celltxt=$cell->getValue();
-            $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES (0, '$celltxt', 12)";
+            $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES ('$translationsheet_ID', '$celltxt', 12)";
             if (mysqli_query($conn, $sql)) {
               echo "新记录插入成功";
             } else {
@@ -75,7 +100,7 @@
     foreach($temp as $k => $v)
     {
       $temp[$k] = special_revert($v);
-      $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES (0, '$temp[$k]', 12)";
+      $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES ('$translationsheet_ID', '$temp[$k]', 12)";
       if (mysqli_query($conn, $sql)) {
         echo "新记录插入成功";
       } else {
@@ -111,7 +136,7 @@
     foreach($temp as $k => $v)
     {
       //$temp[$k] = special_revert($v);
-      $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES (0, '$temp[$k]', 12)";
+      $sql="INSERT INTO translationbase (translationsheet_ID, sourceText, translation_Property) VALUES ('$translationsheet_ID', '$temp[$k]', 12)";
       if (mysqli_query($conn, $sql)) {
         echo "新记录插入成功";
       } else {
