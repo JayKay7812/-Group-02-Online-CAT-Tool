@@ -31,7 +31,6 @@
 			var selObj = window.getSelection();
 		    var options=$("#search option:selected");
 			var choice=options.val();
-			console.log(choice);
 		    if(choice=="baidu"){
 		        window.open("https://www.baidu.com/s?wd="+selObj);
 		    }
@@ -206,11 +205,12 @@
 										tm=data["tm"];
 
 										for ( var i = 0; i <= term.length; i++){
-										  jQuery("#jqGrid0").jqGrid('addRowData', i + 1, term[i]);
+										    jQuery("#jqGrid0").jqGrid('addRowData', i + 1, term[i]);
 										  
 										}
 										for ( var i = 0; i <= tm.length; i++){
-										  jQuery("#jqGrid0").jqGrid('addRowData', i + 1, tm[i]);
+											console.log(tm[i]);
+										    jQuery("#jqGrid0").jqGrid('addRowData', i + 1, tm[i]);
 										}
 										var lan=getQueryVariable("lan");
 										text=jQuery("#jqGrid").jqGrid('getCell', id, "sourceText");
@@ -218,8 +218,9 @@
 											"../include/cat/translate/mt.php?lan="+lan,
 											{src:text},
 											function(result){
-												jQuery("#jqGrid0").jqGrid('addRowData', 0, result);
-											}
+													jQuery("#jqGrid0").jqGrid('addRowData', 99, result);
+											},
+											'json'
 										)
             					    },
             					    error: function (xhr, status, p3, p4) {

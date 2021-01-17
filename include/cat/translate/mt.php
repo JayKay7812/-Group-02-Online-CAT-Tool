@@ -164,7 +164,12 @@ else if($lan=="en-US"){
 }
 
 $arr=translate($query,$from,$to);
+$tar=$arr["trans_result"][0]["dst"];
 
-$result=["Source":$query,"rate":"MT","Target":$arr["trans_result"][0]["dst"]];
-echo $result;
+$result = array(  
+    'Source' => $query,  
+    'rate'  => 'MT',  
+    'Target' => $tar  
+  ); 
+echo json_encode($result,JSON_UNESCAPED_UNICODE);
 ?>

@@ -19,10 +19,11 @@
         else {
             echo "error:".mysqli_error($conn);
         }
-        $check_sql="select sourceText,targertText from translationmemorybase where (sourceText='$srclan' and targertText='$tarlan')";
-        if(!mysqli_query($conn, $check_sql))
+
+        $check_sql="select * from translationmemorybase where (sourceText='$srclan' and targertText='$tarlan')";
+        if(mysqli_query($conn, $check_sql)!==NULL)
         {
-            $addTM_sql = "INSERT INTO translationmemorybase (translationsheet_ID,sourceText,targertText) VALUES ($tsid,'$srclan','$tarlan')";
+            $addTM_sql = "INSERT INTO translationmemorybase (tmsheet_ID,sourceText,targertText) VALUES ($tsid,'$srclan','$tarlan')";
             if(mysqli_query($conn, $addTM_sql)){
 
                 echo "插入成功";
@@ -32,8 +33,6 @@
             }
         }
         else{
-             $s=mysqli_fetch_assoc(mysqli_query($conn, $check_sql));
-            echo $s;
             echo "有重复";
         }
     }
