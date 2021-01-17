@@ -99,10 +99,10 @@
                     <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTMModal">
       					导出TM
                     </button>
-                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
+                    <button class="btn btn-secondary" type="button" onclick=addRow()>
                         添加TM
                     </button>
-                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
+                    <button class="btn btn-secondary" type="button" onclick=delRow()>
                         删除TM
                     </button>
                       
@@ -126,7 +126,7 @@
                     $(document).ready(function () {
                         $("#jqGrid").jqGrid({
                             url: '../include/search0.php?type=6&id='+id,
-                            editurl: '../include/cat/tm/tm.php?action=edit',
+                            editurl: '../include/cat/tm/tm.php?action=edit&sheetid='+id,
                             mtype:'POST',
                             datatype: "json",
                             colModel: [
@@ -157,23 +157,53 @@
                         var lastSelection;
                         function editRow(id) {
                             if (id && id !== lastSelection) {
-                                var s;
-								var i;
-								
-                    			i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
-								
-                                s = jQuery("#jqGrid").getCell(i,"sourceText");
-                                t = jQuery("#jqGrid").getCell(i,"targertText");
-			                    var grid = $("#jqGrid");
-								grid.jqGrid('restoreRow',lastSelection);
-								editparameters={keys: true,url: '../include/cat/tm/tm.php?action=edit',extraparam:{transmemory_ID:id,sourceText:s,targertText:t},errorfunc:alert(1),};
-			                    grid.jqGrid('editRow',id, editparameters);
-                                lastSelection = id;
                                 
+                                var tid;
+                                var s;
+			            		var i;
+                                i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                                tid = jQuery("#jqGrid").getCell(i,"tm_ID");
 
+                                var grid = $("#jqGrid");
+                                grid.jqGrid('restoreRow',lastSelection);
+                                grid.jqGrid('editRow',id, {keys: true,extraparam:{tm_ID:tid}} );
+                                lastSelection = id;
                             }
                         }
+                        
                     });
+                    function addRow() {
+                            // 选中行rowid
+                            var rowId = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            // 选中行实际表示的位置
+                            var ind = $("#jqGrid").getInd(rowId);
+                            // 新插入行的位置
+                            var newInd = ind + 1;
+                            $("#jqGrid").addRowData({tm_ID:rowId+1, sourceText:"",targertText:""}, newInd);
+                        }
+                        function delRow() {
+                            var grid = $("#jqGrid");
+                            var rowKey = grid.getGridParam("selrow");
+                            var id=grid.getCell(rowKey,"tm_ID");
+                            console.log(id);
+                            if (rowKey) {
+                                var r = confirm("您确定要删除这一条翻译记忆吗？");
+                                if (r == true) {
+                                    grid.jqGrid("delRowData", rowKey[0]);
+                                    $.post(
+                                        '../include/cat/tm/tm.php?action=del',
+                                        {id:id},
+                                    )
+                                } else {
+                                    console.log("pass");
+                                }
+                                
+                            }
+                            else {
+                                alert("No rows are selected");
+                            }
+                            
+                        }
                 </script>
           </div>
           <nav class="pagination-sm">

@@ -6,7 +6,9 @@
     {
         $transID=$_POST["translation_ID"];
         $srclan=$_POST["sourceText"];
+        $srclan=htmlspecialchars($srclan,ENT_QUOTES);
         $tarlan=$_POST["targetText"];
+        $tarlan=htmlspecialchars($tarlan,ENT_QUOTES);
         $tsid=$_POST["translationsheet_ID"];
 
         $update_sql = "UPDATE `translationbase`SET targetText='$tarlan' WHERE translation_ID='$transID'";
@@ -17,14 +19,9 @@
         else {
             echo "error:".mysqli_error($conn);
         }
-        $check_sql="select sourceText,targertText from translationmemorybase where sourceText='$srclan' and targertText='$tarlan'";
-        if(mysqli_query($conn, $check_sql)!=NULL)
+        $check_sql="select sourceText,targertText from translationmemorybase where (sourceText='$srclan' and targertText='$tarlan')";
+        if(!mysqli_query($conn, $check_sql))
         {
-            $s=mysqli_fetch_assoc(mysqli_query($conn, $check_sql));
-            echo $s;
-            echo "有重复";
-        }
-        else{
             $addTM_sql = "INSERT INTO translationmemorybase (translationsheet_ID,sourceText,targertText) VALUES ($tsid,'$srclan','$tarlan')";
             if(mysqli_query($conn, $addTM_sql)){
 
@@ -33,6 +30,11 @@
             else {
                 echo "error:".mysqli_error($conn);
             }
+        }
+        else{
+             $s=mysqli_fetch_assoc(mysqli_query($conn, $check_sql));
+            echo $s;
+            echo "有重复";
         }
     }
     else if($action=="addterm")

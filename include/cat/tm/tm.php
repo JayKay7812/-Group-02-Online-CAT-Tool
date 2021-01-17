@@ -27,19 +27,50 @@ if($action=="newtm")
 }
 else if($action=="edit")
 {
-    $tmid=$_POST["transmemory_ID"];
+    $sheet_ID=$_GET["sheetid"];
+    $tmid=$_POST["tm_ID"];
     echo $tmid;
     $src=$_POST["sourceText"];
+    $src=htmlspecialchars($src,ENT_QUOTES);
     echo $src;
     $tar=$_POST["targertText"];
+    $tar=htmlspecialchars($tar,ENT_QUOTES);
     echo $tar;
-    $update_sql = "UPDATE `translationmemorybase` SET sourceText='$src', targertText='$tar' WHERE tm_ID='$tmid'";
-    if(mysqli_query($conn, $update_sql)){
+
+    if($tmid==NULL)
+    {
+        $addrow_sql="INSERT INTO translationmemorybase (tmsheet_ID,sourceText,targertText) VALUES ($sheet_ID,'$src','$tar')";
+        if(!mysqli_query($conn, $addrow_sql)){
         
-        echo "更新成功";
+            echo "添加error:".mysqli_error($conn);
+        }
+        else {
+            echo "添加成功";
+        }
+    }
+    else{
+        $update_sql = "UPDATE `translationmemorybase` SET sourceText='$src', targertText='$tar' WHERE (tm_ID='$tmid' and tmsheet_ID=$sheet_ID)";
+        if(!mysqli_query($conn, $update_sql)){
+            
+            echo "error:".mysqli_error($conn);
+        }
+        else {
+            echo "更新成功";
+        }
+    }
+    
+}
+
+else if($action=="del")
+{
+    $id=$_POST["id"];
+    $del_sql="DELETE from translationmemorybase where tm_ID=$id";
+    if(!mysqli_query($conn, $del_sql)){
+            
+        echo "error:".mysqli_error($conn);
     }
     else {
-        echo "error:".mysqli_error($conn);
+        echo "删除成功";
     }
 }
 

@@ -2,14 +2,13 @@ $("#termsheet").ready(function select()
 {
     
     $.getJSON("../include/search0.php?type=4",function(result){
-        console.log(result["rows"]);
         $.each(result["rows"],function(i,val){
             var txt="<option>"+val["tbsheet_Name"]+"</option>";
             $("#termsheet").append(txt);
         })
     });
 });
- 
+
 function termsub() {
     $.ajax({  
             type: "POST",   //提交的方法
@@ -23,4 +22,6 @@ function termsub() {
                 alert("添加成功");  
             }  
          });
-       };  
+};  
+    
+

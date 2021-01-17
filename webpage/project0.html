@@ -201,7 +201,8 @@
                       var s;
                       i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                       s = jQuery("#jqGrid").getCell(i,"translationsheet_ID");
-                      window.location.href="translation.html?translationsheet_ID="+s;
+                      lan = jQuery("#jqGrid").getCell(i,"sourceLanguage");
+                      window.location.href="translation.html?translationsheet_ID="+s+"&lan="+lan;
                   });
               </script>
         </div>

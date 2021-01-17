@@ -27,6 +27,24 @@
 		$.jgrid.defaults.width = 780;
 		$.jgrid.defaults.responsive = true;
 		$.jgrid.defaults.styleUI = 'Bootstrap';
+		function web_search() {
+			var selObj = window.getSelection();
+		    var options=$("#search option:selected");
+			var choice=options.val();
+			console.log(choice);
+		    if(choice=="baidu"){
+		        window.open("https://www.baidu.com/s?wd="+selObj);
+		    }
+		    else if(choice=="sogou"){
+		        window.open("https://www.sogou.com/web?query="+selObj);
+		    }
+		    else if(choice=="360"){
+		        window.open("https://www.so.com/s?q="+selObj);
+		    }
+		    else if(choice=="google"){
+		        window.open("https://www.google.com.hk/search?&hl=zh-CN&q="+selObj);
+		    }
+		};
 	</script>
 	
 	<style type="text/css">
@@ -41,10 +59,10 @@
 		   padding-top:2px;
 		 }
 	</style>
-	<script src="../include/cat/translate/translation.js"></script>
 	
+	<script type="text/javascript" src="../include/cat/translate/translation.js"></script>
   </head>
-  <body bgcolor="#f8f8f8">
+  <body bgcolor="#f8f8f8" >
 
     <div class="container-fluid">
 	<div class="row" style="border-style:none;margin-bottom:0px;padding-bottom:0px;">
@@ -82,27 +100,22 @@
 			<div>
 			<div style="display: flex;">
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button data-toggle="modal" data-target="#myModal"><img src="../resource/jqgrid/icon/addterm.png" width="30" height="30">添加术语</button></div>
-					<div><button href="../include/cat/translate/translation.php?action=confirm"><img src="../resource/jqgrid/icon/confirm.png" width="30" height="30">确定句段</button></div>
+					<div><button data-toggle="modal" data-target="#myModal"><img src="../resource/jqgrid/icon/addterm.png" width="50" height="50">添加术语</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/import.png" width="30" height="30">导入</button></div>
-					<div><button><img src="../resource/jqgrid/icon/export.png" width="30" height="30">导出</button></div>
+					<div><button><img src="../resource/jqgrid/icon/export.png" width="50" height="50">导出</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/web-search.png" width="50" height="50">在线查询</button></div>
-					
+					<div><button id="bt" onclick="web_search()"><img src="../resource/jqgrid/icon/web-search.png" width="30" height="30" >在线查询</button></div>
+					<select id="search">
+						<option value="baidu" selected>百度</option>
+						<option value="sogou">搜狗</option>
+						<option value="360">360</option>
+						<option value="google">Google</option>
+					</select>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/bold.png" width="30" height="30">加粗</button>
-					<button><img src="../resource/jqgrid/icon/italic.png" width="30" height="30">斜体</button>
-					<button><img src="../resource/jqgrid/icon/underline.png" width="30" height="30">下划线</button></div>
-					<div><button><img src="../resource/jqgrid/icon/superscript.png" width="30" height="30">上标</button>
-					<button><img src="../resource/jqgrid/icon/subscript.png" width="30" height="30">下标</button></div>
-				</div>
-				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/tag.png" width="30" height="30">复制标签</button></div>
-					<div><button><img src="../resource/jqgrid/icon/copy.png" width="30" height="30">复制原文</button></div>
+					<div><button><img src="../resource/jqgrid/icon/copy.png" width="50" height="50">复制原文</button></div>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
 					<div><button><img src="../resource/jqgrid/icon/join.png" width="30" height="30">合并</button></div>
@@ -180,6 +193,7 @@
 								editparameters={keys: true,extraparam:{translationsheet_ID:tsid,translation_ID: tid,sourceText:s}};
 			                    grid.jqGrid('editRow',id, editparameters);
 								lastSelection = id;
+								
 								jQuery("#jqGrid0").jqGrid('clearGridData');
 								
 								$.ajax(
@@ -198,9 +212,15 @@
 										for ( var i = 0; i <= tm.length; i++){
 										  jQuery("#jqGrid0").jqGrid('addRowData', i + 1, tm[i]);
 										}
+										var lan=getQueryVariable("lan");
 										text=jQuery("#jqGrid").jqGrid('getCell', id, "sourceText");
-										var words = text.split(/\s+^\w/);
-										console.log(words);
+										$.post(
+											"../include/cat/translate/mt.php?lan="+lan,
+											{src:text},
+											function(result){
+												jQuery("#jqGrid0").jqGrid('addRowData', 0, result);
+											}
+										)
             					    },
             					    error: function (xhr, status, p3, p4) {
             					        var err = "Error " + " " + status + " " + p3;
@@ -212,8 +232,8 @@
 								jQuery("#jqGrid0").trigger("reloadGrid");
 			                }
 						}
-						
-			        });
+					});
+					
 			    </script>
 		</div> 
 		
