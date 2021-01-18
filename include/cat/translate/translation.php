@@ -11,25 +11,30 @@
         $tarlan=htmlspecialchars($tarlan,ENT_QUOTES);
         $tsid=$_POST["translationsheet_ID"];
 
+        $pro_sql="select project_ID from translationsheet where translationsheet_ID='$tsid'";
+        $proid=mysqli_fetch_assoc(mysqli_query($conn, $pro_sql));
+        $rela="select tmb_ID from relationsheet1 where project_ID='$proid'";
+        $tmsheet_ID=mysqli_fetch_assoc(mysqli_query($conn, $rela));
+
         $update_sql = "UPDATE `translationbase`SET targetText='$tarlan' WHERE translation_ID='$transID'";
         if(mysqli_query($conn, $update_sql)){
             
             echo "更新成功";
         }
         else {
-            echo "error:".mysqli_error($conn);
+            echo "1error:".mysqli_error($conn);
         }
 
         $check_sql="select * from translationmemorybase where (sourceText='$srclan' and targertText='$tarlan')";
         if(mysqli_query($conn, $check_sql)!==NULL)
         {
-            $addTM_sql = "INSERT INTO translationmemorybase (tmsheet_ID,sourceText,targertText) VALUES ($tsid,'$srclan','$tarlan')";
+            $addTM_sql = "INSERT INTO translationmemorybase (tmsheet_ID,sourceText,targertText) VALUES ('$tmsheet_ID','$srclan','$tarlan')";
             if(mysqli_query($conn, $addTM_sql)){
 
                 echo "插入成功";
             }
             else {
-                echo "error:".mysqli_error($conn);
+                echo "2error:".mysqli_error($conn);
             }
         }
         else{
@@ -53,7 +58,7 @@
             echo "chenggong";
         }
         else {
-            echo "error:".mysqli_error($conn);
+            echo "3error:".mysqli_error($conn);
         }
     }  
     

@@ -87,6 +87,7 @@
 						 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
 						<div class="dropdown-divider">
 						</div> <a class="dropdown-item" href="register.html">注册</a>
+						<a class="dropdown-item" href="../include/users/logreg/trsltr_login.php?action=logout">注销</a>
 					</div>
 				</li>
 				</div>
@@ -114,12 +115,10 @@
 					</select>
 				</div>
 				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/copy.png" width="50" height="50">复制原文</button></div>
+					<div><button><img src="../resource/jqgrid/icon/copy.png" width="50" height="50" id="copy">复制原文</button></div>
+					<div>复制后按Enter即可显示在译文区</div>
 				</div>
-				<div style="margin:10px 0px 0px;padding:0px 10px;border-right: 1px solid #d9dddf;">
-					<div><button><img src="../resource/jqgrid/icon/join.png" width="30" height="30">合并</button></div>
-					<div><button><img src="../resource/jqgrid/icon/split.png" width="30" height="30">分割</button></div>
-				</div>
+				
 			</div>
 			</div>
 		</div>
@@ -154,7 +153,7 @@
 								{
 									label: "ID",
 			                        name: 'translation_ID',
-									width: 0.1,
+									width: 50,
 									
 			                    },
 			                    {
@@ -171,8 +170,7 @@
 			                    },
 							],
 							rownumbers: true,
-							loadonce : true,
-							viewrecords: true,
+							viewrecords: false,
 			                onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
 							
 							width: 1000,
@@ -195,24 +193,24 @@
 								
 								jQuery("#jqGrid0").jqGrid('clearGridData');
 								
-								$.ajax(
+								$.ajax( //获取翻译记忆和术语
             					{
-            					    url: "http://127.0.0.1:5000/process/"+tsid+"/"+id,
+            					    url: "http://127.0.0.1:5000/process/"+tsid+"/"+tid,
             					    type: "GET",
             					    success: function (result) {
 										data=result["data"];
 										term=data["term"];
 										tm=data["tm"];
 
-										for ( var i = 0; i <= term.length; i++){
+										for ( var i = 0; i <= term.length; i++){ //术语
 										    jQuery("#jqGrid0").jqGrid('addRowData', i + 1, term[i]);
 										  
 										}
-										for ( var i = 0; i <= tm.length; i++){
-											console.log(tm[i]);
+										for ( var i = 0; i <= tm.length; i++){ //翻译记忆
+											//console.log(tm[i]);
 										    jQuery("#jqGrid0").jqGrid('addRowData', i + 1, tm[i]);
 										}
-										var lan=getQueryVariable("lan");
+										var lan=getQueryVariable("lan"); //机器翻译
 										text=jQuery("#jqGrid").jqGrid('getCell', id, "sourceText");
 										$.post(
 											"../include/cat/translate/mt.php?lan="+lan,
@@ -231,8 +229,17 @@
             					    }
 								});
 								jQuery("#jqGrid0").trigger("reloadGrid");
+								jQuery("#copy").click(function(){
+									var row = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+									id=jQuery("#jqGrid").getCell(row,"translation_ID");
+									var src = jQuery("#jqGrid").getCell(row,"sourceText");
+									console.log(src);
+									$("#jqGrid").jqGrid('setCell',row , "targetText" , src);
+									
+                        		});
 			                }
 						}
+						
 					});
 					
 			    </script>
@@ -262,7 +269,8 @@
 					rowNum: 30,
 					loadonce: true, // this is just for the demo
 					//pager: "#jqGridPager"
-					viewrecords: false,
+					viewrecords:false,
+					emptyrecords:"",
 					
 				});
 			});
@@ -305,7 +313,7 @@
 </form>
 
 <script>
-document.getElementById("user_info").innerHTML="你好"; //显示登录信息
+
 </script>
 
     

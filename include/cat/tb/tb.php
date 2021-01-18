@@ -2,7 +2,8 @@
 header("content-type:text/html; charset=utf-8");//如果点击新建TB后报错：Feild tbsheet_ID have no default value，需去数据库将tbsheet_ID字段设为自增 李善灡
 include("../../conn.php");
 $action = $_GET['action'];
-$userid=0;
+session_start();
+$userid=$_SESSION['userid'];
 if($action=="newtb")
 {
     $tbname=$_POST["tbName"];
@@ -31,16 +32,18 @@ else if($action=="edit")
     $sheet_ID=$_GET["sheetid"];
     $tbid=$_POST["term_ID"];//记得把链接过来的页面里的tb_ID换成term_ID
     echo $tbid;
-    $src=$_POST["sourceText"];
+    $src=$_POST["zh_CN"];
     $src=htmlspecialchars($src,ENT_QUOTES);
     echo $src;
-    $tar=$_POST["targertText"];
+    $tar=$_POST["en_US"];
     $tar=htmlspecialchars($tar,ENT_QUOTES);
     echo $tar;
+    $def=$_POST["term_Definition"];
+    $def=htmlspecialchars($def,ENT_QUOTES);
 
     if($tbid==NULL)
     {
-        $addrow_sql="INSERT INTO termbase (tbsheet_ID,zh_CN,en_US) VALUES ($sheet_ID,'$src','$tar')";
+        $addrow_sql="INSERT INTO termbase (tbsheet_ID,zh_CN,en_US,`term_Definition`) VALUES ($sheet_ID,'$src','$tar','$def')";
         if(!mysqli_query($conn, $addrow_sql)){
         
             echo "添加术语出错:".mysqli_error($conn);
@@ -50,7 +53,7 @@ else if($action=="edit")
         }
     }
     else{
-        $update_sql = "UPDATE `termbase` SET zh_CN='$src', en_US='$tar' WHERE (term_ID='$tbid' and tbsheet_ID=$sheet_ID)";
+        $update_sql = "UPDATE `termbase` SET zh_CN='$src', en_US='$tar',term_Definition='$def' WHERE (term_ID='$tbid' and tbsheet_ID=$sheet_ID)";
         if(!mysqli_query($conn, $update_sql)){
             
             echo "error:".mysqli_error($conn);
@@ -65,7 +68,8 @@ else if($action=="edit")
 else if($action=="del")
 {
     $id=$_POST["id"];
-    $del_sql="DELETE from termbase where term_ID=$id";
+    $name=$_POST["name"];
+    $del_sql="INSERT into deletedfile (deleted_ID, del_name, `type`) values ($id,'$name','术语')";
     if(!mysqli_query($conn, $del_sql)){
             
         echo "error:".mysqli_error($conn);

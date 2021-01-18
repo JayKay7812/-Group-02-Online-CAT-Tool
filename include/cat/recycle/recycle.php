@@ -95,6 +95,27 @@
             }
         }
 
+        else if($type=="file") //文件删除部分
+        {
+
+            $del_trans_sql="DELETE from translationbase where translationsheet_ID=$id";
+            if(!mysqli_query($conn, $del_trans_sql)){
+            
+                echo "error:".mysqli_error($conn);
+            }
+            else {
+                echo "删除句段成功";
+            }
+            $del_file="DELETE from translationsheet where translationsheet_ID = $id"; //删除项目内文件
+            if(!mysqli_query($conn, $del_file)){
+            
+                echo "error:".mysqli_error($conn);
+            }
+            else {
+                echo "删除文件成功";
+            }
+        }
+
         
         $del_sql_2="DELETE from deletedfile where (deleted_ID=$id and type='$type')"; //回收站更新
         if(!mysqli_query($conn, $del_sql_2)){

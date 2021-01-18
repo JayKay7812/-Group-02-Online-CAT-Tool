@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><!--新增术语表并插入数据库功能实现，但是后台数据填充到jggrid表格失败 李善灡-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CAT工具</title>
@@ -44,7 +44,7 @@
   							<a class="nav-link" href="project.html">项目</a>
   						</li>
   						<li class="nav-item">
-  							<a class="nav-link disabled" href="#">术语库</a>
+  							<a class="nav-link disabled" href="termbase.html">术语库</a>
   						</li>
   						<li class="nav-item">
   							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
@@ -54,7 +54,8 @@
   							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
   								 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
   								<div class="dropdown-divider">
-  								</div> <a class="dropdown-item" href="register.html">注册</a>
+                                  </div> <a class="dropdown-item" href="register.html">注册</a>
+                                  <a class="dropdown-item" href="../include/users/logreg/trsltr_login.php?action=logout">注销</a>
   							</div>
   						</li>
   					</ul>
@@ -74,7 +75,7 @@
 							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link disabled" href="#">术语库</a>
+							<a class="nav-link disabled" href="termbase.html">术语库</a>
 						</li>
             <li class="nav-item">
 							<a class="nav-link" href="recycle.html">回收站</a>
@@ -92,24 +93,18 @@
                 <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#imprtTBModal">
     							导入术语表
     						</button>
-                <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#exprtTBModal">
+                <button class="btn btn-secondary" type="button" id="expterm" data-toggle="modal" data-target="#exprtTBModal">
     							导出术语表
     						</button>
-    						<button class="btn btn-secondary" type="button">
+    						<button class="btn btn-secondary" type="button" id="del">
     							删除术语表
     						</button>
-    						<button class="btn btn-secondary" type="button">
+    						<button class="btn btn-secondary" type="button" id="edittb">
     							编辑术语表
     						</button>
     					</div>
             </li>
-            <li class="nav-item dropdown ml-md-auto">
-               <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">排序方式</a>
-               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                 <a class="dropdown-item">截止日期</a>
-                 <a class="dropdown-item">创建日期</a>
-               </div>
-            </li>
+            
         </ul>
       </nav>
       <div class="col-md-10"> <!--句段窗口-->
@@ -120,35 +115,42 @@
             <script type="text/javascript" id="seg">
                 $(document).ready(function () {
                     $("#jqGrid").jqGrid({
-                        url: 'data.json',
-                        editurl: 'clientArray',
+					    url: '../include/search0.php?type=7',
+                        mtype:'POST',
                         datatype: "json",
                         colModel: [
                             {
-                    label: "ID",
-                                name: 'ID',
+                    label: "术语库ID",
+                                name: 'tbsheet_ID',
                                 width: 75
                             },
                             {
-                    label: "项目名",
-                                name: '术语库名',
+                    label: "术语库名",
+                                name: 'tbsheet_Name',
                                 width: 100,
                                  // must set editable to true if you want to make the field editable
                             },
                             {
-                    label: "语言对",
-                                name: '语言对',
+                    label: "源语言",
+                                name: 'sourceLanguage',
                                 width: 100,
                                  // must set editable to true if you want to make the field editable
                             },
+							{
+                    label: "目标语言",
+                                name: 'targetLanguage',
+                                width: 100,
+                                 // must set editable to true if you want to make the field editable
+                            },							
                             {
                     label: "当前状态",
-                                name: '当前状态',
+                                name: 'tbsheet_Status',
                                 width: 100,
                                  // must set editable to true if you want to make the field editable
                             },
                         ],
-                sortname: 'EmployeeID',
+                sortname: 'tbsheet_ID',//
+				rownumbers: true,
                 loadonce : true,
                 viewrecords: true,
                         onSelectRow: editRow, // the javascript function to call on row click. will ues to to put the row in edit mode
@@ -164,41 +166,57 @@
                             lastSelection = id;
                         }
                     }
+					jQuery("#edittb").click(function(){
+                            var s;
+                            i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            s = jQuery("#jqGrid").getCell(i,"tbsheet_ID");
+                            window.location.href="termbase_edit.html?id="+s;
+                    });
+                    jQuery("#expterm").click(function(){ //导出term
+                      var s1;
+                      i1 = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                      s1 = jQuery("#jqGrid").getCell(i1,"tbsheet_ID");
+                      if(s1)
+                      {
+                        window.location.href="../include/cat/tb/tbdownload.php?tbsheetid="+s1;
+                      }
+                      else
+                      {
+                        alert("请选择一个表以继续。");
+                      }
+                    });
+                    jQuery("#del").click(function(){ //删除term
+                      var s;
+                            i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            id = jQuery("#jqGrid").getCell(i,"tbsheet_ID");
+                            name=jQuery("#jqGrid").getCell(i,"tbsheet_Name");
+                            if (i) {
+                                var r = confirm("您确定要删除该内容吗？");
+                                if (r == true) {
+                                  $("#jqGrid").jqGrid("delRowData", i[0]);
+                                    $.post(
+                                        '../include/cat/tb/tb.php?action=del',
+                                        {id:id,name:name},
+                                    )
+                                } else {
+                                    console.log("pass");
+                                }  
+                            }
+                            else {
+                                alert("您未选中内容");
+                            }
+                    });
                 });
             </script>
       </div>
-          <nav class="pagination-sm">
-    				<ul class="pagination">
-    					<li class="page-item">
-    						<a class="page-link" href="#">Previous</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">1</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">2</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">3</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">4</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">5</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">Next</a>
-    					</li>
-    				</ul>
-    			</nav>
+          
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <!--TB新建模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<form method="post" action="../include/cat/tb/tb.php?action=newtb" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
   <div class="modal fade" id="newTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
@@ -243,7 +261,7 @@
               <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                   </button>
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary" >
                       提交
                   </button><span id="tip"> </span>
               </div>
@@ -252,7 +270,7 @@
   </div>
 </form>
 <!--TB导入模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+<form method="post" action="../include/cat/tb/tb.php?action=newtb" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
   <div class="modal fade" id="imprtTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">

@@ -84,9 +84,26 @@
           }
         }
     }
+    function special_replace($pattern, $str){
+      global $special;
+      preg_match_all($pattern, $str, $temp);
+      if(is_array($temp))
+          foreach($temp[0] as $k => $v){
+              $special[0][] = $v;
+              $special[1][] = $temp2 = "|".md5($v)."|";
+              $str = str_replace($v, $temp2, $str);
+          }
+      return $str;
+  }
+
+  function special_revert($str){
+      global $special;
+      return str_replace($special[1],$special[0],$str);
+  }
   //英文分句
   if ($sourceLanguage=="en-US")
   {
+    
     $special[0] = array();
     $special[1] = array();
     //替换特殊的
@@ -109,22 +126,8 @@
       }
     }
 
-    function special_replace($pattern, $str){
-        global $special;
-        preg_match_all($pattern, $str, $temp);
-        if(is_array($temp))
-            foreach($temp[0] as $k => $v){
-                $special[0][] = $v;
-                $special[1][] = $temp2 = "|".md5($v)."|";
-                $str = str_replace($v, $temp2, $str);
-            }
-        return $str;
-    }
-
-    function special_revert($str){
-        global $special;
-        return str_replace($special[1],$special[0],$str);
-    }
+    
+    
   }
   //中文分句
   else if($sourceLanguage=="zh-CN")

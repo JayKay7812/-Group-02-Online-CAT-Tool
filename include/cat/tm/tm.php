@@ -1,7 +1,8 @@
 <?php
 include("../../conn.php");
 $action = $_GET['action'];
-$userid=0;
+session_start();
+$userid=$_SESSION['userid'];
 if($action=="newtm")
 {
     $tmname=$_POST["tmName"];
@@ -64,7 +65,8 @@ else if($action=="edit")
 else if($action=="del")
 {
     $id=$_POST["id"];
-    $del_sql="DELETE from translationmemorybase where tm_ID=$id";
+    $name=$_POST["name"];
+    $del_sql="INSERT into deletedfile (deleted_ID, del_name, `type`) values ($id,'$name','TM')";
     if(!mysqli_query($conn, $del_sql)){
             
         echo "error:".mysqli_error($conn);

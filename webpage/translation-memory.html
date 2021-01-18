@@ -54,7 +54,8 @@
   							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
   								 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
   								<div class="dropdown-divider">
-  								</div> <a class="dropdown-item" href="register.html">注册</a>
+                  </div> <a class="dropdown-item" href="register.html">注册</a>
+                  <a class="dropdown-item" href="../include/users/logreg/trsltr_login.php?action=logout">注销</a>
   							</div>
   						</li>
   					</ul>
@@ -89,13 +90,13 @@
       						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTBModal">
       							新建TM
       						</button>
-                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
+                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#impTMModal">
       							导入TM
       						</button>
-                  <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#">
+                  <button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="expTm">
       							导出TM
       						</button>
-      						<button class="btn btn-secondary" type="button">
+      						<button class="btn btn-secondary" type="button" id="del">
       							删除TM
       						</button>
       						<button class="btn btn-secondary" type="button" id="edittm">
@@ -103,13 +104,7 @@
       						</button>
       					</div>
               </li>
-              <li class="nav-item dropdown ml-md-auto">
-  							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">排序方式</a>
-  							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-  								 <a class="dropdown-item">截止日期</a>
-                   <a class="dropdown-item">创建日期</a>
-  							</div>
-  						 </li>
+              
           </nav>
           <div class="col-md-10"> <!--句段窗口-->
             <div >
@@ -172,12 +167,46 @@
                                 window.location.href="transmemory_edit.html?id="+id;
                             }
                         }
-                        jQuery("#edittm").click(function(){
+                        jQuery("#edittm").click(function(){ //编辑
                             var s;
                             i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                             s = jQuery("#jqGrid").getCell(i,"tmsheet_ID");
                             window.location.href="transmemory_edit.html?id="+s;
                         });
+                    });
+                    jQuery("#expTm").click(function(){ //导出tm
+                      var s1;
+                      i1 = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                      s1 = jQuery("#jqGrid").getCell(i1,"tmsheet_ID");
+                      if(s1)
+                      {
+                        window.location.href="../include/cat/tm/tmdownload.php?tmsheetid="+s1;
+                      }
+                      else
+                      {
+                        alert("请选择一个表以继续。");
+                      }
+                    });
+                    jQuery("#del").click(function(){ //删除tm
+                      var s;
+                            i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            id = jQuery("#jqGrid").getCell(i,"tmsheet_ID");
+                            name=jQuery("#jqGrid").getCell(i,"tmsheet_Name");
+                            if (i) {
+                                var r = confirm("您确定要删除该内容吗？");
+                                if (r == true) {
+                                  $("#jqGrid").jqGrid("delRowData", i[0]);
+                                    $.post(
+                                        '../include/cat/tm/tm.php?action=del',
+                                        {id:id,name:name},
+                                    )
+                                } else {
+                                    console.log("pass");
+                                }  
+                            }
+                            else {
+                                alert("您未选中内容");
+                            }
                     });
                 </script>
           </div>
@@ -265,8 +294,8 @@
   </div>
 </form>
 <!--TM导入模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
-  <div class="modal fade" id="imprtTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form method="post" action="../include/cat/tm/tmupload.php" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" enctype="multipart/form-data" style="margin: 20px;">
+  <div class="modal fade" id="impTMModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
@@ -279,13 +308,13 @@
               </div>
               <div class="modal-body">
                   <form class="form-horizontal" role="form">
-                      <div class="form-group">
-                          <label for="lastname" class="col-sm-3 control-label">TM名</label>
-                          <div class="col-sm-9">
-                              <input type="text" class="form-control" name="projName" value="" id="projName"
-                                     placeholder="术语表名">
-                          </div>
-                      </div>
+                    <div class="form-group">
+                        <label for="lastname" class="col-sm-3 control-label">TM表名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="tmName" value="" id="tmName"
+                                   placeholder="TM表名">
+                        </div>
+                    </div>
                       <div class="form-group">
                           <label for="lastname" class="col-sm-3 control-label">源语言</label>
                           <div class="col-sm-9">
@@ -305,19 +334,9 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="lastname" class="col-sm-3 control-label">文件格式</label>
-                          <div class="col-sm-9">
-                            <select class="form-control" name="targetLanguage" id="targetLanguage">
-                              <option value="tmx">tmx</option>
-                              <option value="xlxs">xlxs</option>
-                            </select>
-                          </div>
-                      </div>
-                      <div class="form-group">
                           <label for="remark" class="col-sm-3 control-label">选择文件</label>
                           <div class="col-sm-9">
-                              <input  type="file" class="form-control"  name="slctFile" id="slctFile">
-
+                              <input  type="file" class="form-control"  name="file" id="file">
                               </input>
                           </div>
                       </div>
@@ -334,40 +353,7 @@
       </div><!-- /.modal -->
   </div>
 </form>
-<!--TM导出模态-->
-<form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
-  <div class="modal fade" id="exprtTBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                      &times;
-                  </button>
-                  <h4 class="modal-title" id="myModalLabel">
-                      导出TM
-                  </h4>
-              </div>
-              <div class="modal-body">
-                  <form class="form-horizontal" role="form">
-                      <div class="form-group">
-                          <label for="lastname" class="col-sm-3 control-label">导出路径</label>
-                          <div class="col-sm-9">
-                            <input type="file" name="" value="">
-                          </div>
-                      </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                  </button>
-                  <button type="submit" class="btn btn-primary">
-                      提交
-                  </button><span id="tip"> </span>
-              </div>
-          </div><!-- /.modal-content -->
-      </div><!-- /.modal -->
-  </div>
-</form>
+
     <script src="../resource/bootstrap/js/bootstrap.min.js"></script>
     <script src="../resource/bootstrap/js/scripts.js"></script>
   </body>

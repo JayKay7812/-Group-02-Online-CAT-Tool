@@ -45,20 +45,21 @@
   							<a class="nav-link active" href="../index.html">主页</a>
   						</li>
   						<li class="nav-item">
-  							<a class="nav-link disabled" href="#">项目</a>
+  							<a class="nav-link disabled" href="project.html">项目</a>
   						</li>
   						<li class="nav-item">
   							<a class="nav-link" href="termbase.html">术语库</a>
   						</li>
   						<li class="nav-item">
-  							<a class="nav-link" href="#">翻译记忆库</a>
+  							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
   						</li>
   						<li class="nav-item dropdown ml-md-auto">
   							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">登录</a>
   							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
   								 <a class="dropdown-item" href="login_pm.html">项目经理</a> <a class="dropdown-item" href="login.html">普通译员</a>
   								<div class="dropdown-divider">
-  								</div> <a class="dropdown-item" href="register.html">注册</a>
+                  </div> <a class="dropdown-item" href="register.html">注册</a>
+                  <a class="dropdown-item" href="../include/users/logreg/trsltr_login.php?action=logout">注销</a>
   							</div>
   						</li>
   					</ul>
@@ -72,7 +73,7 @@
           </h3>
 					<ul class="nav flex-column border-bottom">
 						<li class="nav-item">
-							<a class="nav-link disabled" href="#">项目</a>
+							<a class="nav-link disabled" href="project.html">项目</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="translation-memory.html">翻译记忆库</a>
@@ -84,11 +85,7 @@
 							<a class="nav-link" href="recycle.html">回收站</a>
 						</li>
 					</ul>
-          <ul>
-            <li>
-              <a class="nav-link" href="">网络检索设置</a>
-            </li>
-          </ul>
+          
 				</div>
 				<div class="col-md-10 border">
           <nav class="navbar">
@@ -98,27 +95,15 @@
       						<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newProjModal">
                     新建项目
       						</button>
-      						<button class="btn btn-secondary" type="button" href="javascript:void(0)" id="cm1">
+      						<button class="btn btn-secondary" type="button" href="javascript:void(0)" id="del">
       							删除项目
       						</button>
       						<button class="btn btn-secondary" type="submit" href="javascript:void(0)" id="editProj">
       							编辑项目
       						</button>
-      						<button class="btn btn-secondary" type="button">
-                    项目分析
-      						</button>
-                  <button class="btn btn-secondary" type="button">
-                    结项
-      						</button>
                 </div>
               </li>
-              <li class="nav-item dropdown ml-md-auto">
-  							 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">排序方式</a>
-  							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-  								 <a class="dropdown-item">截止日期</a>
-                   <a class="dropdown-item">创建日期</a>
-  							</div>
-  						 </li>
+              
           </ul>
         </nav>
         <div class="col-md-10"> <!--句段窗口-->
@@ -197,39 +182,36 @@
                     s = jQuery("#jqGrid").getCell(i,"project_ID");
                     alert(i);
                   });
-                  jQuery("#editProj").click(function(){
+                  jQuery("#editProj").click(function(){ //编辑项目
                     var s;
                     i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
                     s = jQuery("#jqGrid").getCell(i,"project_ID");
                     window.location.href="project0.html?projectid="+s;
                   });
+                  jQuery("#del").click(function(){ //删除项目
+                      var s;
+                            i = $("#jqGrid").jqGrid('getGridParam', 'selrow');
+                            id = jQuery("#jqGrid").getCell(i,"project_ID");
+                            name=jQuery("#jqGrid").getCell(i,"project_Name");
+                            if (i) {
+                                var r = confirm("您确定要删除该内容吗？");
+                                if (r == true) {
+                                  $("#jqGrid").jqGrid("delRowData", i[0]);
+                                    $.post(
+                                        '../include/project/proj.php?action=project',
+                                        {id:id,name:name},
+                                    )
+                                } else {
+                                    console.log("pass");
+                                }  
+                            }
+                            else {
+                                alert("您未选中内容");
+                            }
+                    });
               </script>
         </div>
-          <nav class="pagination-sm">
-    				<ul class="pagination">
-    					<li class="page-item">
-    						<a class="page-link" href="#">Previous</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">1</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">2</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">3</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">4</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">5</a>
-    					</li>
-    					<li class="page-item">
-    						<a class="page-link" href="#">Next</a>
-    					</li>
-    				</ul>
-    			</nav>
+          
 				</div>
 			</div>
 		</div>
@@ -345,6 +327,9 @@
         </div>
     </div>
 </div>
+<script>
+  
+</script>
     <script src="../resource/bootstrap/js/bootstrap.min.js"></script>
     <script src="../resource/bootstrap/js/scripts.js"></script>
   </body>

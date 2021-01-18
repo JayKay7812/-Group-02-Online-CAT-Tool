@@ -12,11 +12,13 @@
   echo "<br/>";
   $accountID=12;
   $accountType="user";
+  session_start();
+  $userid=$_SESSION['userid'];
 
 #,`source_Language`,`target_Language`,`due_Date`   ,'$sourceLanguage','$targetLanguage','$dueDate'
   #if($accountType=="user")
   #{
-    $insert_sql = "INSERT INTO `project` (`PM_ID`,`project_Name`,`project_Status`,`project_Property`,`source_Language`,`target_Language`,`due_Date`) VALUES ('{$_SESSION["username"]}','$project_Name','opened','personal','$sourceLanguage','$targetLanguage','$dueDate')";
+    $insert_sql = "INSERT INTO `project` (`PM_ID`,`project_Name`,`project_Status`,`project_Property`,`source_Language`,`target_Language`,`due_Date`) VALUES ($userid,'$project_Name','opened','personal','$sourceLanguage','$targetLanguage','$dueDate')";
   #}
   #else if($accountType=="PM")
   #{
