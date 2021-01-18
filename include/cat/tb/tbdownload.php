@@ -7,7 +7,7 @@
   # 实例化 Spreadsheet 对象
   $spreadsheet = new Spreadsheet();
   $tbsheetID=$_GET["tbsheetid"];
-  $sql="SELECT sourceText,targetText,term_Definition FROM termbase WHERE translationsheet_ID='$tbsheetID'";
+  $sql="SELECT zh_CN,en_US,term_Definition FROM termbase WHERE tbsheet_ID=1";
   $result=mysqli_query($conn,$sql);
   print_r($result);
   // 输出每行数据

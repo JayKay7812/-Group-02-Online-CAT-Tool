@@ -26,7 +26,7 @@
       	move_uploaded_file($filename,$destination);
         $sourceLanguage=$_POST['sourceLanguage'];
         $targetLanguage=$_POST['targetLanguage'];
-        $sql="INSERT INTO translationmemorysheet (tmsheet_Name, sourceLanguage, targetLanguage, owner_ID) VALUES ('$savename', '$sourceLanguage', '$targetLanguage',$userid)";
+        $sql="INSERT INTO translationmemorysheet (tmsheet_Name, sourceLanguage, targetLanguage, owner_ID) VALUES ('$savename', '$sourceLanguage', '$targetLanguage','$userid')";
 
         if (mysqli_query($conn, $sql)) {
           echo "新记录插入成功";

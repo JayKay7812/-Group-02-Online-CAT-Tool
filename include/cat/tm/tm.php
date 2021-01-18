@@ -8,7 +8,7 @@ if($action=="newtm")
     $tmname=$_POST["tmName"];
     $srclan=$_POST["sourceLanguage"];
     $tarlan=$_POST["targetLanguage"];
-    $newtm_sql="INSERT INTO translationmemorysheet (tmsheet_Name, sourceLanguage, targetLanguage, tmsheet_Status, owner_ID) VALUES ('$tmname','$srclan','$tarlan','个人',$userid)";
+    $newtm_sql="INSERT INTO translationmemorysheet (tmsheet_Name, sourceLanguage, targetLanguage, tmsheet_Status, owner_ID) VALUES ('$tmname','$srclan','$tarlan','个人','$userid')";
     $check_sql="SELECT tmsheet_Name from translationmemorysheet where tmsheet_Name = '$tmname'";
     
    if(mysqli_fetch_assoc(mysqli_query($conn, $check_sql))==null)
@@ -67,6 +67,19 @@ else if($action=="del")
     $id=$_POST["id"];
     $name=$_POST["name"];
     $del_sql="INSERT into deletedfile (deleted_ID, del_name, `type`) values ($id,'$name','TM')";
+    if(!mysqli_query($conn, $del_sql)){
+            
+        echo "error:".mysqli_error($conn);
+    }
+    else {
+        echo "删除成功";
+    }
+}
+else if($action=="del2")
+{
+    $id=$_POST["id"];
+    $name=$_POST["name"];
+    $del_sql="DELETE from translationmemorybase where tm_ID=$id";
     if(!mysqli_query($conn, $del_sql)){
             
         echo "error:".mysqli_error($conn);

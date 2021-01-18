@@ -18,13 +18,22 @@
 #,`source_Language`,`target_Language`,`due_Date`   ,'$sourceLanguage','$targetLanguage','$dueDate'
   #if($accountType=="user")
   #{
-    $insert_sql = "INSERT INTO `project` (`PM_ID`,`project_Name`,`project_Status`,`project_Property`,`source_Language`,`target_Language`,`due_Date`) VALUES ($userid,'$project_Name','opened','personal','$sourceLanguage','$targetLanguage','$dueDate')";
-  #}
+    $insert_sql = "INSERT INTO `project` (`PM_ID`,`project_Name`,`project_Status`,`project_Property`,`source_Language`,`target_Language`,`due_Date`) VALUES ('$userid','$project_Name','opened','personal','$sourceLanguage','$targetLanguage','$dueDate')";
+    $status = mysqli_query($conn,$insert_sql);
+    if(!$status)
+    {
+      echo '<script type="text/javaScript">alert("新建项目失败！");点击此处 <a href="javascript:history.back(-1);">返回</a> 重试</script>';
+    }
+    else
+    {
+      echo '<script>alert("新建项目成功！");</script>';
+    }
+    #}
   #else if($accountType=="PM")
   #{
   #  $insert_sql = "INSERT INTO `project` (`owner_ID`,`project_ID`, `project_Name`,`project_Status`,`project_Property`,`source_Language`,`target_Language`,`due_Date`) VALUES ('$accountID','$project_ID', '$project_Name','opened','teamed','$sourceLanguage','$targetLanguage','$dueDate')";
   #}
-
+  
   $get_pro_id="select project_ID from project where project_Name='$project_Name'";
   $result=mysqli_fetch_assoc(mysqli_query($conn, $get_pro_id));
   $project_ID=$result["project_ID"];
@@ -38,7 +47,7 @@
   $result=mysqli_fetch_assoc(mysqli_query($conn, $get_tm_id));
   $tm_ID=$result["tmsheet_ID"];
   echo $tm_ID;*/
-  $newrelation_term="INSERT INTO relationsheet1 (project_ID,tmb_ID) VALUES ($project_ID,$tbSetting);";
+  $newrelation_term="INSERT INTO relationsheet1 (project_ID,tmb_ID) VALUES ('$project_ID','$tbSetting')";
   $add_rela1=mysqli_query($conn, $newrelation_term);
   if(!$add_rela1)
 	{
@@ -48,7 +57,7 @@
 	{
     echo "1成功！";
   }
-  $newrelation_tb="INSERT INTO relationsheet2 (project_ID,tb_ID) VALUES ($project_ID,$tmSetting);";
+  $newrelation_tb="INSERT INTO relationsheet2 (project_ID,tb_ID) VALUES ('$project_ID','$tmSetting')";
   $add_rela2=mysqli_query($conn, $newrelation_tb);
   if(!$add_rela2)
 	{
@@ -56,17 +65,9 @@
 	}
 	else
 	{
-    echo "2成功！";
+    echo '<script>alert("新建项目成功！");window.location.href="../../webpage/project.html";</script>';
   }
 
 
-  $status = mysqli_query($conn,$insert_sql);
-	if(!$status)
-	{
-    echo '<script type="text/javaScript">alert("新建项目失败！");点击此处 <a href="javascript:history.back(-1);">返回</a> 重试</script>';
-	}
-	else
-	{
-    echo '<script>alert("新建项目成功！");</script>';
-  }
+  
  ?>

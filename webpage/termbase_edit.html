@@ -97,9 +97,7 @@
             <ul class="nav nav-pills">
               <li>
                 <div class="btn-group btn-group-lg boreder" role="group">
-                    <button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#newTMModal">
-      					导出术语库
-                    </button>
+                    
                     <button class="btn btn-secondary" type="button" onclick=addRow()>
                         添加术语
                     </button>
@@ -198,7 +196,7 @@
                                 if (r == true) {
                                     grid.jqGrid("delRowData", rowKey[0]);
                                     $.post(
-                                        '../include/cat/tm/tb.php?action=del',
+                                        '../include/cat/tb/tb.php?action=del2',
                                         {id:id},
                                     )
                                 } else {

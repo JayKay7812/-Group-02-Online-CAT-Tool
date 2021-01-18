@@ -9,7 +9,7 @@ if($action=="newtb")
     $tbname=$_POST["tbName"];
     $srclan=$_POST["sourceLanguage"];
     $tarlan=$_POST["targetLanguage"];
-    $newtb_sql="INSERT INTO termsheet (tbsheet_Name, sourceLanguage, targetLanguage, tbsheet_Status, owner_ID) VALUES ('$tbname','$srclan','$tarlan','个人',$userid)";
+    $newtb_sql="INSERT INTO termsheet (tbsheet_Name, sourceLanguage, targetLanguage, tbsheet_Status, owner_ID) VALUES ('$tbname','$srclan','$tarlan','个人','$userid')";
     $check_sql="SELECT tbsheet_Name from termsheet where tbsheet_Name = '$tbname'";
     
    if(mysqli_fetch_assoc(mysqli_query($conn, $check_sql))==null)
@@ -78,6 +78,18 @@ else if($action=="del")
         echo "删除术语成功";
     }
 }
-
+else if($action=="del2")
+{
+    $id=$_POST["id"];
+    $name=$_POST["name"];
+    $del_sql="DELETE from termbase where term_ID=$id";
+    if(!mysqli_query($conn, $del_sql)){
+            
+        echo "error:".mysqli_error($conn);
+    }
+    else {
+        echo "删除成功";
+    }
+}
 ?>
 
