@@ -29,7 +29,7 @@
 	}
 	else if($type==8){ //显示术语库内所有术语
 		$id = $_GET["id"];
-		$sql="select term_ID, zh_CN, en_US, term_Definition from termbase where term_ID=$id";
+		$sql="select term_ID, zh_CN, en_US, term_Definition from termbase where tbsheet_ID=$id";
 	}
 	else if($type==11){
 		$sql="SELECT * FROM translationmemorysheet";
