@@ -24,6 +24,13 @@
 		$id = $_GET["id"];
 		$sql="select tm_ID, sourceText, targertText from translationmemorybase where tmsheet_ID=$id";
 	}
+        else if($type==7){ //显示术语库
+		$sql="SELECT tbsheet_ID,tbsheet_Name,sourceLanguage,targetLanguage,tbsheet_Status FROM termsheet where owner_ID like '$userid'";
+	}
+	else if($type==8){ //显示术语库内所有术语
+		$id = $_GET["id"];
+		$sql="select term_ID, zh_CN, en_US, term_Definition from termbase where term_ID=$id";
+	}
 	else if($type==11){
 		$sql="SELECT * FROM translationmemorysheet";
 	}
